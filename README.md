@@ -7,6 +7,7 @@ Welcome to the WebApp project! This repository contains the source code for a we
 Before you begin, ensure you have met the following requirements:
 
 - Node.js: Make sure you have Node.js installed. You can download it from [nodejs.org](https://nodejs.org/).
+- PostgreSQL: Install and set up PostgreSQL on your local machine. You can download it from [postgresql.org](https://www.postgresql.org/download/).
 
 ## Build and Deploy
 
