@@ -4,6 +4,10 @@ const app=require('./app')
 const db = require('./models/index.js');
 const loadUserDataFromCSV = require('./csvprocessor.js');
 
+//const PORT=3000
+// app.use(bodyParser.json()); // Parse JSON request bodies
+// app.use(bodyParser.urlencoded({ extended: true }));
+const app=require('./app')
 
 PORT=3000;
 db.sequelize.sync({ force: true })
@@ -18,5 +22,6 @@ db.sequelize.sync({ force: true })
     console.error('Database connection error:');
   });
 
+  
 
 
