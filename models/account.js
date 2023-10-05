@@ -1,0 +1,65 @@
+const bcrypt=require('bcrypt')
+
+'use strict';
+const {
+  Model
+} = require('sequelize');
+module.exports = (sequelize, DataTypes) => {
+  class account extends Model {
+    /**
+     * Helper method for defining associations.
+     * This method is not a part of Sequelize lifecycle.
+     * The `models/index` file will call this method automatically.
+     */
+    static associate({assignments}) {
+      // define association here
+      this.hasMany(assignments)
+    }
+  }
+  account.init({
+    id: {
+            type: DataTypes.UUID,
+            defaultValue: DataTypes.UUIDV4,
+            primaryKey: true,
+            readOnly: true,
+      },
+    firstname: {
+            type: DataTypes.STRING,
+            allowNull: false,
+     },
+    lastname: {
+            type: DataTypes.STRING,
+            allowNull:true    },
+    email:    {
+            type:DataTypes.STRING,
+            allowNull: false  },  
+    password:{
+            type:DataTypes.STRING,
+            allowNull: false  },
+    account_created:{
+            type: DataTypes.DATE,
+            defaultValue: DataTypes.literal('CURRENT_TIMESTAMP'),
+            allowNull: false,
+            readOnly: true, },
+    account_updated:{
+            type: DataTypes.DATE,
+            defaultValue: DataTypes.literal('CURRENT_TIMESTAMP'),
+            allowNull: false,
+            readOnly: true, }
+  }, {
+    sequelize,
+    timestamps: false,
+    tableName:'account',
+    modelName: 'account',
+  });
+
+  account.beforeCreate(async (user, options) => {
+    if (user.password) {
+      const saltRounds = 10; // You can adjust the number of salt rounds as needed
+      const hashedPassword = await bcrypt.hash(user.password, saltRounds);
+      user.password = hashedPassword;
+    }
+  });
+
+  return account;
+};
