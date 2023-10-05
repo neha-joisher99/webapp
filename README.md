@@ -40,3 +40,18 @@ npm start
 yarn start
 The application will be accessible at http://localhost:3000 in your web browser.
 
+
+ **Set Up Environment Variables:**
+
+   Create a `.env` file in the project root directory and configure the following environment variables:
+
+   ```env
+   # PostgreSQL Database Configuration
+   DB_HOST=localhost
+   DB_PORT=5432
+   DB_USER=your_database_user
+   DB_PASSWORD=your_database_password
+   DB_NAME=your_database_name
+
+   # Application Configuration
+   SECRET_KEY=your_secret_key
