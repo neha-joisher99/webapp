@@ -40,7 +40,6 @@ npm start
 yarn start
 The application will be accessible at http://localhost:3000 in your web browser.
 
-
  **Set Up Environment Variables:**
 
    Create a `.env` file in the project root directory and configure the following environment variables:
@@ -55,3 +54,4 @@ The application will be accessible at http://localhost:3000 in your web browser.
 
    # Application Configuration
    SECRET_KEY=your_secret_key
+

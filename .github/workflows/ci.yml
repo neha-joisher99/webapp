@@ -42,19 +42,15 @@ jobs:
 
           POSTGRES_DB: dev_db
 
+
         ports:
 
           - 5432:5432
-
-        
-
  
 
     steps:
 
     - uses: actions/checkout@v3
-
- 
 
     - name: Use Node.js ${{ matrix.node-version }}
 
