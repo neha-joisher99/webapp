@@ -3,6 +3,7 @@ const router = express.Router();
 const { sequelize } = require('../models/index'); // Import the Sequelize instance
 //const db = require('./models/index.js');
 
+
 router.all('', async (req, res) => {
   try {
     // Check the database connectivity
