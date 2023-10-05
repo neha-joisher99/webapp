@@ -1,0 +1,85 @@
+name: CI for Application
+
+on:
+
+  workflow_dispatch:
+
+  pull_request:
+
+    branches: [ "main" ]
+
+ 
+
+jobs:
+
+  build-and-test:
+
+    runs-on: ubuntu-latest
+
+ 
+
+    strategy:
+
+      matrix:
+
+        node-version: [19.2.0]
+
+        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+
+ 
+
+    services:
+
+      postgres:
+
+        image: postgres:latest
+
+        env:
+
+          POSTGRES_USER: $DB_USER
+
+          POSTGRES_PASSWORD: $DB_PASSWORD
+
+          POSTGRES_DB: $DB_DATABASE
+
+        ports:
+
+          - 5432:5432
+
+        options: -e POSTGRES_PASSWORD=password -d
+
+ 
+
+    steps:
+
+    - uses: actions/checkout@v3
+
+ 
+
+    - name: Use Node.js ${{ matrix.node-version }}
+
+      uses: actions/setup-node@v3
+
+      with:
+
+        node-version: ${{ matrix.node-version }}
+
+        cache: 'npm'
+
+ 
+
+    - run: npm ci
+
+ 
+
+    - run: npm run test
+
+      env:
+
+        POSTGRES_HOST: $DB_HOST
+
+        POSTGRES_USER: $DB_USER
+
+        POSTGRES_PASSWORD: $DB_PASSWORD
+
+        POSTGRES_DB: $DB_DATABASE
