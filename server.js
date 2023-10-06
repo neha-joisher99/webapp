@@ -4,6 +4,7 @@
 // const bodyParser = require('body-parser')
 // const loadUserDataFromCSV = require('./csvprocessor.js')
 
+
 //dotenv.config(); 
 
 //const PORT=3000
@@ -21,16 +22,9 @@ const app=require('./app')
 //   console.log(`Server is running on port: http://localhost:${PORT }`)
 // })
 
-// async function main() {
-//   try {
-//         await db.sequelize.authenticate({ alter: true });
-//         loadUserDataFromCSV();
-//   }
-//   catch(err){
-//   console.log(err )
-// }}
 
-// main(); 
+
+
 
 // db.sequelize.sync({alter:true}).then((reult)=>{
 //   console.log('Connected');
@@ -41,7 +35,36 @@ const app=require('./app')
 
 
 
+// const loadUserDataFromCSV = require('./csvprocessor.js')
 
+
+
+// //import csv users
+
+
+
+// const PORT=3000
+// app.listen(PORT,  ()=>{
+//     console.log(`Server is running on port: http://localhost:${PORT }`)
+// })
+
+const app = require('./app');
+const db = require('./models/index.js');
+const loadUserDataFromCSV = require('./csvprocessor.js');
+
+const PORT = process.env.PORT || 3000;
+
+db.sequelize.sync({ alter: true })
+  .then(() => {
+    console.log('Connected to the database');
+    loadUserDataFromCSV();
+    app.listen(PORT, () => {
+      console.log(`Server is running on port: http://localhost:${PORT}`);
+    });
+  })
+  .catch((error) => {
+    console.error('Database connection error:', error);
+  });
 
 
 
