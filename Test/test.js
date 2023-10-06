@@ -4,8 +4,6 @@ const request = require('supertest');
 const app = require('../app.js');
 const chai = require('chai');
 
-const app = require('../app.js');
-
 
 // Use the 'expect' style assertion
 const expect = chai.expect;
