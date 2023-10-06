@@ -15,7 +15,7 @@ jobs:
         image: postgres:latest
         env:
           POSTGRES_USER: 'nehajoisher'
-          POSTGRES_PASSWORD: ''
+          POSTGRES_PASSWORD: 'healthz' 
           POSTGRES_DB: 'dev_db'
         ports:
           - 5432:5432
@@ -26,7 +26,6 @@ jobs:
         node-version:
           - 14.x
           - 16.x
-          - 18.x
 
     steps:
       - name: checkout
@@ -52,5 +51,5 @@ jobs:
             sleep 1
           done'
 
-      - name: Run Jest Tests
+      - name: Run Tests
         run: npm test
