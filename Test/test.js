@@ -1,5 +1,4 @@
 
-
 const request = require('supertest');
 const app = require('../app.js');
 const chai = require('chai');
@@ -7,7 +6,6 @@ const chai = require('chai');
 
 // Use the 'expect' style assertion
 const expect = chai.expect;
-
 
 describe('/healthz endpoint', () => {
   it('should return a 200 status when the database is available', async () => {
