@@ -29,7 +29,6 @@ const express = require('express');
 const dotenv = require('dotenv');
 const db = require('./models/index.js');
 const bodyParser = require('body-parser')
-const app=express();
 dotenv.config(); 
 app.use(bodyParser.json()); // Parse JSON request bodies
 app.use(bodyParser.urlencoded({ extended: true }));
