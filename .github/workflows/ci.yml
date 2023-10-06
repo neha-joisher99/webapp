@@ -1,51 +1,56 @@
-name: CI for Application
+name: webapp-CI
 
 on:
-  workflow_dispatch:
   pull_request:
-    branches: [main]
+    branches: ["main"]
 
 jobs:
-  build-and-test:
+  build:
+    name: webapp-ci
+
     runs-on: ubuntu-latest
 
     services:
       postgres:
         image: postgres:latest
+        env:
+          POSTGRES_USER: 'nehajoisher'
+          POSTGRES_PASSWORD: ''
+          POSTGRES_DB: ''
+
         ports:
           - 5432:5432
-        env:
-          POSTGRES_USER: nehajoisher
-          POSTGRES_PASSWORD: ""
-          POSTGRES_DB: dev_db
+
+    strategy:
+      matrix:
+        node-version:
+          - 14.x
+          - 16.x
+          - 18.x
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+      - name: checkout
+        uses: actions/checkout@v3
 
-      - name: Set up Docker Compose
-        run: docker-compose up -d
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Installing nodemon
+        run: npm install nodemon
 
       - name: Wait for PostgreSQL
         run: |
-          # Install wait-for-it script
-          apt-get update && apt-get install -y wait-for-it
-          
-          # Wait for PostgreSQL to be ready
-          wait-for-it -t 60 localhost:5432 -- echo "PostgreSQL is ready"
+          apt-get update && apt-get install -y postgresql-client
+          until pg_isready -h localhost -p 5432 -U nehajoisher; do
+            echo "Waiting for PostgreSQL to start..."
+            sleep 1
+          done
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v2
-        with:
-          node-version: 14
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Run tests
+      - name: Run Jest Tests
         run: npm test
-        env:
-          POSTGRES_HOST: localhost
-          POSTGRES_USER: nehajoisher
-          POSTGRES_PASSWORD: ""
-          POSTGRES_DB: dev_db
