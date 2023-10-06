@@ -48,9 +48,9 @@ const app=require('./app')
 //     console.log(`Server is running on port: http://localhost:${PORT }`)
 // })
 
-const app = require('./app');
 const db = require('./models/index.js');
 const loadUserDataFromCSV = require('./csvprocessor.js');
+
 
 
 db.sequelize.sync({ alter: true })
