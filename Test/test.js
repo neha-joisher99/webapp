@@ -1,25 +1,11 @@
-// const chai = require('chai');
-// const chaiHttp = require('chai-http');
-
-// const app = require('../app.js');
-
-// chai.use(chaiHttp);
-// const expect = chai.expect;
-
-// const request = require('supertest');
-// const app = require('../app.js');
-
-// describe('/healthz endpoint', () => {
-//     it('should return a 200 status when the database is available', async () => {
-//       const response = await request(app).get('/healthz');
-//       expect(response.status).toBe(200);
-//     });
-//   });
 
 
 const request = require('supertest');
 const app = require('../app.js');
 const chai = require('chai');
+
+const app = require('../app.js');
+
 
 // Use the 'expect' style assertion
 const expect = chai.expect;
