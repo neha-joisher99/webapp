@@ -29,5 +29,5 @@ Object.keys(db).forEach(modelName => {
 });
 
 db.sequelize = sequelize;
-
+console.log('In index.js -' ,sequelize)
 module.exports=db
