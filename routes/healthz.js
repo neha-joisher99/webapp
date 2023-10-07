@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const { sequelize } = require('../models'); // Import the Sequelize instance
+const { sequelize } = require('../models/index'); // Import the Sequelize instance
+//const db = require('./models/index.js');
 
 router.all('', async (req, res) => {
   try {
@@ -41,6 +42,7 @@ router.all('', async (req, res) => {
     // Handle other errors as needed
     res.setHeader('Cache-Control', 'no-cache');
     res.setHeader('Content-Length', '0');
+    console.log(error);
     res.status(503).send();
   }
 });
@@ -50,6 +52,7 @@ async function checkDatabaseConnectivity() {
     await sequelize.authenticate();
     return true;
   } catch (error) {
+    console.log(error);
     return false;
   }
 }
