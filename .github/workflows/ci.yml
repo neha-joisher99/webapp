@@ -45,7 +45,5 @@ jobs:
             echo "Waiting for PostgreSQL to start..."
             sleep 1
           done'
-      - name: start server
-        run: npm run start
       - name: Run Tests
         run: npm test
