@@ -1,22 +1,14 @@
 {
   "development": {
     "username": "nehajoisher",
-<<<<<<< HEAD
     "password": "neha",
-=======
-    "password": null,
->>>>>>> db933ee (adding rest of the files)
     "database": "dev_db",
     "host": "localhost",
     "dialect": "postgres"
   },
   "test": {
     "username": "root",
-<<<<<<< HEAD
     "password": "neha",
-=======
-    "password": null,
->>>>>>> db933ee (adding rest of the files)
     "database": "database_test",
     "host": "127.0.0.1",
     "dialect": "mysql"
