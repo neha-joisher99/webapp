@@ -38,6 +38,7 @@ jobs:
         run: npm install
 
 
+
       # - name: Wait for PostgreSQL to start
       #   run: |
       #     timeout 60s bash -c \
@@ -45,5 +46,6 @@ jobs:
       #       echo "Waiting for PostgreSQL to start..."
       #       sleep 1
       #     done'
+
       - name: Run Tests
         run: npm test
