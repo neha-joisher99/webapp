@@ -14,10 +14,11 @@ db.sequelize.sync({ alter: true })
     });
   })
   .catch((error) => {
-    console.error('Database connection error:', error);
+    console.error('Database connection error:');
   });
 
 
+  
 app.listen(PORT,  ()=>{
     console.log(`Server is running on port: http://localhost:${PORT }`)
 })
