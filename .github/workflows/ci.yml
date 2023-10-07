@@ -15,16 +15,13 @@ jobs:
         image: postgres:latest
         env:
           POSTGRES_USER: 'nehajoisher'
-          POSTGRES_PASSWORD: '' 
+          POSTGRES_PASSWORD: 'neha' 
           POSTGRES_DB: 'dev_db'
         ports:
           - 5432:5432
-        options: --health-cmd="pg_isready" --health-interval=10s --health-timeout=5s --health-retries=3
-
     strategy:
       matrix:
         node-version:
-          - 14.x
           - 16.x
 
     steps:
@@ -40,8 +37,6 @@ jobs:
       - name: Install Dependencies
         run: npm install
 
-      - name: Installing nodemon
-        run: npm install nodemon
 
       - name: Wait for PostgreSQL to start
         run: |
@@ -50,6 +45,7 @@ jobs:
             echo "Waiting for PostgreSQL to start..."
             sleep 1
           done'
-
+      - name: start server
+        run: npm run start
       - name: Run Tests
         run: npm test
