@@ -1,0 +1,50 @@
+name: Packer Template Validation
+
+on:
+  pull_request:
+    types:
+      - opened
+
+jobs:
+  packer_validation:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: configuration
+        run: |
+            touch .env
+            echo port=${{ secrets.PORT }} >> .env
+            echo database=${{ secrets.DATABASE }} >> .env
+            echo host=${{ secrets.HOST }} >> .env
+            echo dialect=${{ secrets.DIALECT }} >> .env
+            echo user=${{ secrets.USER }} >> .env
+            echo password=${{ secrets.PASSWORD }} >> .env
+        
+      -  name: Install packer
+         run: |
+            wget https://releases.hashicorp.com/packer/1.7.4/packer_1.7.4_linux_amd64.zip
+            unzip packer_1.7.4_linux_amd64.zip
+            chmod +x packer
+            sudo mv packer /usr/local/bin/
+            packer --version
+
+      - name: Packer fmt
+        run: |
+          cd packer/
+          packer init .
+          packer fmt -check .
+          if [ $? -ne 0 ]; then
+            echo "Packer template formatting check failed."
+            exit 1
+          fi
+
+      - name: Packer validate
+        run: |
+          packer validate .
+          if [ $? -ne 0 ]; then
+            echo "Packer template validation failed."
+            exit 1
+          fi

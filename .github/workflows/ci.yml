@@ -3,6 +3,8 @@ name: webapp-CI
 on:
   pull_request:
     branches: ["main"]
+  push:
+    branches: ["main"]
 
 jobs:
   build:
@@ -14,9 +16,9 @@ jobs:
       postgres:
         image: postgres:latest
         env:
-          POSTGRES_USER: 'nehajoisher'
-          POSTGRES_PASSWORD: 'neha' 
-          POSTGRES_DB: 'dev_db'
+          POSTGRES_USER: $POSTGRES_USER
+          POSTGRES_PASSWORD: $POSTGRES_PASSWORD 
+          POSTGRES_DB: $POSTGRES_DB
         ports:
           - 5432:5432
     strategy:
@@ -36,16 +38,6 @@ jobs:
 
       - name: Install Dependencies
         run: npm install
-
-
-
-      # - name: Wait for PostgreSQL to start
-      #   run: |
-      #     timeout 60s bash -c \
-      #     'until pg_isready -h localhost -p 5432 -U nehajoisher; do
-      #       echo "Waiting for PostgreSQL to start..."
-      #       sleep 1
-      #     done'
 
       - name: Run Tests
         run: npm test

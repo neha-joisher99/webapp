@@ -1,0 +1,61 @@
+name: webapp-CI
+
+on:
+  push:
+    branches: ["main"]
+
+jobs:
+  build:
+    name: ami_build
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: checkout
+        uses: actions/checkout@v3
+
+      - name: configuration
+        run: |
+            touch .env
+            echo PORT=${{ secrets.PORT }} >> .env
+            echo DATABASE=${{ secrets.DATABASE }} >> .env
+            echo HOST=${{ secrets.HOST }} >> .env
+            echo DIALECT=${{ secrets.DIALECT }} >> .env
+            echo USER=${{ secrets.USER }} >> .env
+            echo PASSWORD=${{ secrets.PASSWORD }} >> .env
+
+      - name: Install packer
+        run: 
+         wget https://releases.hashicorp.com/packer/1.7.4/packer_1.7.4_linux_amd64.zip
+         unzip packer_1.7.4_linux_amd64.zip
+         chmod +x packer
+         sudo mv packer /usr/local/bin/
+         packer --version
+
+      - name: Build zip
+        working-directory: ${{ github.workspace }}
+        run: zip -r webapp.zip ./*
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+            aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
+            aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
+            aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Run packer
+        run: | 
+              packer init .
+              echo PORT=${{ secrets.PORT }} 
+              echo DATABASE=${{ secrets.DATABASE }} 
+              echo HOST=${{ secrets.HOST }}
+              echo DIALECT=${{ secrets.DIALECT }} 
+              echo USER=${{ secrets.USER }} 
+              echo PASSWORD=${{ secrets.PASSWORD }} 
+              packer fmt .
+              packer validate .
+              packer build -var 'USER=${{ secrets.USER }}' -var 'DATABASE=${{ secrets.DATABASE}}' 'PASSWORD=${{ secrets.PASSWORD }}' aws-debian.pkr.hcl
+
+
+
+        
