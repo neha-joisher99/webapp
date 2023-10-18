@@ -1,4 +1,4 @@
-name: webapp-CI
+name: ami-build
 
 on:
   push:
