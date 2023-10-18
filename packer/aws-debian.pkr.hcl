@@ -70,7 +70,7 @@ source "amazon-ebs" "debian-mywebapp" {
 }
 
 build {
-  name    = "my-first-build"
+  name    = "my-first-build" 
   sources = ["source.amazon-ebs.debian-mywebapp"]
 
   provisioner "file" {
@@ -83,7 +83,7 @@ build {
     environment_vars=[
       "PASSWORD=${var.PASSWORD}",
       "DATABASE=${var.DATABASE}",
-      "USER=${var.USER}"
+      "USER=${var.DATABASE}"
     ]
   }
 
