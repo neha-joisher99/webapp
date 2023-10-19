@@ -48,7 +48,7 @@ jobs:
 
       - name: Packer validate
         run: |
-          cd packer
+          cd packer/
           packer validate .
           if [ $? -ne 0 ]; then
             echo "Packer template validation failed."

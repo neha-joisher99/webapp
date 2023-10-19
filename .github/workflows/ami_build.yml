@@ -35,6 +35,7 @@ jobs:
       - name: Build zip
         working-directory: ${{ github.workspace }}
         run: zip -r webapp.zip .
+             
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
