@@ -28,9 +28,9 @@ jobs:
       - name: packer variable
         run: |
               touch variables.pkr.hcl
-              echo USER=${{ vars.USER }} >> .variables.pkr.hcl
-              echo DATABASE=${{ vars.DATABASE }} >> .variables.pkr.hcl
-              echo PASSWORD=${{ vars.PASSWORD }} >> .variables.pkr.hcl
+              echo USER=${{ vars.USER }} >> variables.pkr.hcl
+              echo DATABASE=${{ vars.DATABASE }} >> variables.pkr.hcl
+              echo PASSWORD=${{ vars.PASSWORD }} >> variables.pkr.hcl
               echo "Print packer variable file"
               cat variables.pkr.hcl
 
