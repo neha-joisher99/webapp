@@ -12,7 +12,10 @@ jobs:
       - name: Build zip
         working-directory: ${{ github.workspace }}
         run: zip -r webapp.zip .
-             pwd
+
+      - name: Current directory
+        run: pwd
+             
 
       - name: configuration
         run: |
