@@ -2,7 +2,8 @@ name: ami-build
 
 on:
   push:
-    branches: ["main"]
+    branches: 
+      - main
 
 jobs:
   build:
@@ -46,6 +47,7 @@ jobs:
 
       - name: Run packer
         run: | 
+              cd packer/
               packer init .
               echo PORT=${{ secrets.PORT }} 
               echo DATABASE=${{ secrets.DATABASE }} 
