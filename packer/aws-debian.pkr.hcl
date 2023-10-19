@@ -32,24 +32,24 @@ variable "subnet_id" {
   default = "subnet-02b0c1b860ad092ee"
 }
 
-variable "USER"{
-  type = string
-  default= "${env("USER")}"
+variable "USER" {
+  type    = string
+  default = "${env("USER")}"
 }
 
-variable "DATABASE"{
-  type =string
+variable "DATABASE" {
+  type    = string
   default = "${env("DATABASE")}"
 }
 
-variable "PASSWORD"{
-  type = string
-  default= "${env("PASSWORD")}"
+variable "PASSWORD" {
+  type    = string
+  default = "${env("PASSWORD")}"
 }
 
 
 source "amazon-ebs" "debian-mywebapp" {
-  ami_users = [577217829277] 
+  ami_users = [577217829277]
   //profile         = "${var.aws_profile}"
   ami_name        = "csye6225_${formatdate("YYYY_MM_DD_hh_mm_ss", timestamp())}"
   ami_description = "Debian AMI for CSYE 6225"
@@ -57,8 +57,8 @@ source "amazon-ebs" "debian-mywebapp" {
   region          = "${var.aws_region}"
   source_ami      = "${var.source_ami}"
   ssh_username    = "${var.ssh_username}"
-  subnet_id       =  "${var.subnet_id}"
-  ssh_agent_auth = false
+  subnet_id       = "${var.subnet_id}"
+  ssh_agent_auth  = false
 
   launch_block_device_mappings {
     device_name           = "/dev/xvda"
@@ -70,7 +70,7 @@ source "amazon-ebs" "debian-mywebapp" {
 }
 
 build {
-  name    = "my-first-build" 
+  name    = "my-first-build"
   sources = ["source.amazon-ebs.debian-mywebapp"]
 
   provisioner "file" {
@@ -80,7 +80,7 @@ build {
 
   provisioner "shell" {
     script = "./setup.sh"
-    environment_vars=[
+    environment_vars = [
       "PASSWORD=${var.PASSWORD}",
       "DATABASE=${var.DATABASE}",
       "USER=${var.DATABASE}"
