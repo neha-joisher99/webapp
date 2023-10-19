@@ -10,8 +10,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+      - uses: actions/checkout@v3
+      - name: Build zip
+        working-directory: ${{ github.workspace }}
+        run: zip -r webapp.zip .
+             pwd
 
       - name: configuration
         run: |
@@ -23,13 +26,16 @@ jobs:
             echo user=${{ secrets.USER }} >> .env
             echo password=${{ secrets.PASSWORD }} >> .env
         
-      -  name: Install packer
-         run: |
-            wget https://releases.hashicorp.com/packer/1.7.4/packer_1.7.4_linux_amd64.zip
-            unzip -n packer_1.7.4_linux_amd64.zip
-            chmod +x packer
-            sudo mv packer /usr/local/bin/
-            packer --version
+    #   -  name: Install packer
+    #      run: |
+    #         wget https://releases.hashicorp.com/packer/1.7.4/packer_1.7.4_linux_amd64.zip
+    #         unzip -n packer_1.7.4_linux_amd64.zip
+    #         chmod +x packer
+    #         if [ -f /usr/local/bin/packer ]; then
+    #         sudo rm /usr/local/bin/packer
+    #         fi
+    #         sudo mv packer /usr/local/bin/
+    #         packer --version
 
       - name: Packer fmt
         run: |
@@ -43,7 +49,9 @@ jobs:
 
       - name: Packer validate
         run: |
+          cd packer
           packer validate .
           if [ $? -ne 0 ]; then
             echo "Packer template validation failed."
             exit 1 
+          fi
