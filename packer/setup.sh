@@ -12,7 +12,7 @@ sudo -u postgres psql -c "CREATE DATABASE $DATABASE;"
 sudo -u postgres psql -c "GRANT ALL PRIVILEGES ON DATABASE $DATABASE TO $USER;"
 sudo -u postgres psql <<EOF
 \c $DATABASE
-GRANT CREATE ON SCHEMA public TO $USER;
+GRANT CREATE ON SCHEMA public TO '$USER';
 EOF
 
 sudo systemctl start postgresql
