@@ -250,6 +250,12 @@ const putAssignemnts=(autheticate)=async(req,res)=>{
 }
 }
 
+const patchAssignmentwithId=(autheticate)=async(req,res)=>{
+  return res.status(405).send();
+}
 
-module.exports={ getAssignemnts, postAssignemnts, getAssignment, deleteAssignments,patchAssignment, putAssignemnts}
+
+
+
+module.exports={ getAssignemnts, postAssignemnts, getAssignment, deleteAssignments,patchAssignment, putAssignemnts, patchAssignmentwithId}
 
