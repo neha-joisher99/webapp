@@ -25,15 +25,6 @@ jobs:
             echo USER=${{ secrets.USER }} >> .env
             echo PASSWORD=${{ secrets.PASSWORD }} >> .env
 
-      - name: packer variable
-        run: |
-              cd packer/
-              touch variables.pkr.hcl
-              echo SOURCE_AMI=\"${{ vars.USER }}\" >> variables.pkrvars.hcl
-              echo DATABASE=\"${{ vars.DATABASE }}\" >> variables.pkrvars.hcl
-              echo PASSWORD=\"${{ vars.PASSWORD }}\" >> variables.pkrvars.hcl
-              echo "Print packer variable file"
-              cat variables.pkr.hcl
 
       # - name: Install packer
       #   run: 
@@ -61,7 +52,7 @@ jobs:
               packer init .
               packer fmt .
               packer validate .
-              packer build --var-file=variables.pkr.hcl aws-debian.pkr.hcl
+             
 
 
 
