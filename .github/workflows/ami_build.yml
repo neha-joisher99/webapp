@@ -24,13 +24,13 @@ jobs:
             echo USER=${{ secrets.USER }} >> .env
             echo PASSWORD=${{ secrets.PASSWORD }} >> .env
 
-      - name: Install packer
-        run: 
-         wget https://releases.hashicorp.com/packer/1.7.4/packer_1.7.4_linux_amd64.zip
-         unzip packer_1.7.4_linux_amd64.zip
-         chmod +x packer
-         sudo mv packer /usr/local/bin/
-         packer --version
+      # - name: Install packer
+      #   run: 
+      #    wget https://releases.hashicorp.com/packer/1.7.4/packer_1.7.4_linux_amd64.zip
+      #    unzip packer_1.7.4_linux_amd64.zip
+      #    chmod +x packer
+      #    sudo mv packer /usr/local/bin/
+      #    packer --version
 
       - name: Build zip
         working-directory: ${{ github.workspace }}
