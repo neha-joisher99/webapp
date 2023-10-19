@@ -70,7 +70,7 @@ source "amazon-ebs" "debian-mywebapp" {
 }
 
 build {
-  name    = "my-first-build" 
+  name    = "my-first-build"
   sources = ["source.amazon-ebs.debian-mywebapp"]
 
   provisioner "file" {
