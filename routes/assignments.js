@@ -9,6 +9,7 @@ router.post('',authenticate, controller.postAssignemnts);
 router.put('/:id',authenticate,controller.putAssignemnts);
 router.get('/:id',authenticate,controller.getAssignment);
 router.patch('',authenticate, controller.patchAssignment);
+router.patch('/:id',authenticate, controller.patchAssignmentwithId);
 router.delete('/:id',authenticate,controller.deleteAssignments);
 
 
