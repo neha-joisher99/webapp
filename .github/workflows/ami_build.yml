@@ -27,6 +27,7 @@ jobs:
 
       - name: packer variable
         run: |
+              cd packer/
               touch variables.pkr.hcl
               echo USER=${{ vars.USER }} >> variables.pkr.hcl
               echo DATABASE=${{ vars.DATABASE }} >> variables.pkr.hcl
@@ -58,12 +59,6 @@ jobs:
         run: | 
               cd packer/
               packer init .
-              echo PORT=${{ secrets.PORT }} 
-              echo DATABASE=${{ secrets.DATABASE }} 
-              echo HOST=${{ secrets.HOST }}
-              echo DIALECT=${{ secrets.DIALECT }} 
-              echo USER=${{ secrets.USER }} 
-              echo PASSWORD=${{ secrets.PASSWORD }} 
               packer fmt .
               packer validate .
               packer build -var-file="variables.pkr.hcl" aws-debian.pkr.hcl
