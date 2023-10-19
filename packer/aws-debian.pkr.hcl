@@ -34,17 +34,17 @@ variable "subnet_id" {
 
 variable "USER" {
   type    = string
-  default = "${env("USER")}"
+  default = "nehajoisher"
 }
 
 variable "DATABASE" {
   type    = string
-  default = "${env("DATABASE")}"
+  default = "dev_db"
 }
 
 variable "PASSWORD" {
   type    = string
-  default = "${env("PASSWORD")}"
+  default = "neha"
 }
 
 

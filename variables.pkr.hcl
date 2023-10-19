@@ -1,0 +1,3 @@
+USER = ""
+DATABASE = ""
+PASSWORD = ""

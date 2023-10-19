@@ -7,7 +7,7 @@ sudo npm install -g nodemon
 echo "USER: $USER"
 echo "PASSWORD: $PASSWORD"
 echo "DATABASE: $DATABASE"
-sudo -u postgres psql -c "CREATE USER $USER WITH PASSWORD 'your_password';"
+sudo -u postgres psql -c "CREATE USER $USER WITH PASSWORD '$PASSWORD';"
 sudo -u postgres psql -c "CREATE DATABASE $DATABASE;"
 sudo -u postgres psql -c "GRANT ALL PRIVILEGES ON DATABASE $DATABASE TO $USER;"
 sudo -u postgres psql <<EOF
