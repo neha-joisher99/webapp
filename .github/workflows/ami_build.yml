@@ -29,9 +29,9 @@ jobs:
         run: |
               cd packer/
               touch variables.pkr.hcl
-              echo USER=${{ vars.USER }} >> variables.pkr.hcl
-              echo DATABASE=${{ vars.DATABASE }} >> variables.pkr.hcl
-              echo PASSWORD=${{ vars.PASSWORD }} >> variables.pkr.hcl
+              echo SOURCE_AMI=\"${{ vars.USER }}\" >> variables.pkrvars.hcl
+              echo DATABASE=\"${{ vars.DATABASE }}\" >> variables.pkrvars.hcl
+              echo PASSWORD=\"${{ vars.PASSWORD }}\" >> variables.pkrvars.hcl
               echo "Print packer variable file"
               cat variables.pkr.hcl
 
@@ -61,7 +61,7 @@ jobs:
               packer init .
               packer fmt .
               packer validate .
-              packer build -var-file=variables.pkr.hcl aws-debian.pkr.hcl
+              packer build --var-file=variables.pkr.hcl aws-debian.pkr.hcl
 
 
 
