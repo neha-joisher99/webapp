@@ -53,3 +53,4 @@ jobs:
           if [ $? -ne 0 ]; then
             echo "Packer template validation failed."
             exit 1 
+          fi
