@@ -57,7 +57,7 @@ jobs:
               echo PASSWORD=${{ secrets.PASSWORD }} 
               packer fmt .
               packer validate .
-              packer build -var 'USER=${{ secrets.USER }}' -var 'DATABASE=${{ secrets.DATABASE}}' 'PASSWORD=${{ secrets.PASSWORD }}' aws-debian.pkr.hcl
+              packer build -var "USER=${{ secrets.USER }}" -var "DATABASE=${{ secrets.DATABASE }}" -var "PASSWORD=${{ secrets.PASSWORD }}" aws-debian.pkr.hcl
 
 
 
