@@ -13,3 +13,4 @@ describe('/healthz endpoint', () => {
     expect(response.status).to.equal(200); // Use 'to.equal' for Chai assertions
   });
 });
+
