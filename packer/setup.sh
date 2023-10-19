@@ -32,3 +32,4 @@ destination_path="/opt/users/"
 sudo npm audit fix
 sudo npm install
 
+
