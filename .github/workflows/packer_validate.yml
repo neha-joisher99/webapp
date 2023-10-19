@@ -2,8 +2,6 @@ name: Packer Template Validation
 
 on:
   pull_request:
-    types:
-      - opened
 
 jobs:
   packer_validation:
@@ -39,6 +37,7 @@ jobs:
 
       - name: Packer fmt
         run: |
+          pwd
           cd packer/
           packer init .
           packer fmt -check .
@@ -49,7 +48,7 @@ jobs:
 
       - name: Packer validate
         run: |
-          cd packer
+          pwd
           packer validate .
           if [ $? -ne 0 ]; then
             echo "Packer template validation failed."
