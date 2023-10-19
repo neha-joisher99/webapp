@@ -24,7 +24,7 @@ cd webapp/
 sudo unzip webapp1.zip
 
 source_path="/home/admin/webapp/users.csv"
-destination_path="/opt/users/"
+destination_path="/opt/"
 
 # Move the file if it exists
 [ -e "$source_path" ] && sudo mv "$source_path" "$destination_path" && echo "File 'users.csv' moved to '$destination_path'"
