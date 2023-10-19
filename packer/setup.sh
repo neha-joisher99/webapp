@@ -16,9 +16,9 @@ sudo systemctl start postgresql
 sudo systemctl enable postgresql
 
 sudo mkdir /home/admin/webapp
-sudo mv /home/admin/webapp.zip /home/admin/webapp/
+sudo mv /home/admin/webapp1.zip /home/admin/webapp/
 cd webapp/
-sudo unzip webapp.zip
+sudo unzip webapp1.zip
 sudo npm audit fix
 sudo npm install
 
