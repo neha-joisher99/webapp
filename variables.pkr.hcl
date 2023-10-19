@@ -1,3 +1,0 @@
-USER = ""
-DATABASE = ""
-PASSWORD = ""

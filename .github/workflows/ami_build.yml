@@ -61,7 +61,7 @@ jobs:
               packer init .
               packer fmt .
               packer validate .
-              packer build -var-file="variables.pkr.hcl" aws-debian.pkr.hcl
+              packer build -var-file=variables.pkr.hcl aws-debian.pkr.hcl
 
 
 
