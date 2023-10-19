@@ -52,7 +52,10 @@ jobs:
               packer init .
               packer fmt .
               packer validate .
-             
+              echo PORT=${{ secrets.PORT }} 
+              echo DATABASE=${{ secrets.DATABASE }} 
+              echo PASSWORD=${{ secrets.PASSWORD }} 
+              packer build -var "USER=${{ secrets.USER }}" -var "DATABASE=${{ secrets.DATABASE }}" -var "PASSWORD=${{ secrets.PASSWORD }}" aws-debian.pkr.hcl
 
 
 
