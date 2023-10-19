@@ -23,7 +23,7 @@ sudo mv /home/admin/webapp1.zip /home/admin/webapp/
 cd webapp/
 sudo unzip webapp1.zip
 
-source_path="home/admin/webapp/users.csv"
+source_path="/home/admin/webapp/users.csv"
 destination_path="/opt/users/"
 
 # Move the file if it exists
