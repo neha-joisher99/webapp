@@ -67,7 +67,7 @@ source "amazon-ebs" "debian-mywebapp" {
     volume_type           = "gp2"
 
   }
-}
+
 
 build {
   name    = "my-first-build"
