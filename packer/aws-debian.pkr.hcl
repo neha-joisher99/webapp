@@ -67,7 +67,7 @@ source "amazon-ebs" "debian-mywebapp" {
     volume_type           = "gp2"
 
   }
-
+}
 
 build {
   name    = "my-first-build"
@@ -79,7 +79,7 @@ build {
   }
 
   provisioner "shell" {
-    script = "./setup.sh"
+    script = "./bswd.sh"
     environment_vars = [
       "PASSWORD=${var.PASSWORD}",
       "DATABASE=${var.DATABASE}",
