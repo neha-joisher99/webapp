@@ -79,7 +79,7 @@ build {
   }
 
   provisioner "shell" {
-    script = "./bswd.sh"
+    script = "./setup.sh"
     environment_vars = [
       "PASSWORD=${var.PASSWORD}",
       "DATABASE=${var.DATABASE}",
