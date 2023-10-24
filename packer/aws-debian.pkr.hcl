@@ -37,6 +37,12 @@ variable "DATABASE" {
   default = "${env("DATABASE")}"
 }
 
+variable "HOST" {
+  type    = string
+  default = "${env("HOST")}"
+}
+
+
 variable "PASSWORD" {
   type    = string
   default = "${env("PASSWORD")}"
