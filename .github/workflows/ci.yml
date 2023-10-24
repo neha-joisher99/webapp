@@ -32,10 +32,8 @@ jobs:
       - name: configuration
         run: |
             touch .env
-            echo PORT=${{ secrets.PORT }} >> .env
             echo DATABASE=${{ secrets.DATABASE }} >> .env
             echo HOST=${{ secrets.HOST }} >> .env
-            echo DIALECT=${{ secrets.DIALECT }} >> .env
             echo USER=${{ secrets.USER }} >> .env
             echo PASSWORD=${{ secrets.PASSWORD }} >> .env
 
