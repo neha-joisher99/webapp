@@ -14,7 +14,7 @@ db.sequelize.sync({ alter: true })
     });
   })
   .catch((error) => {
-    console.error('Database connection error:');
+    console.error('Database connection error:',error);
   });
 
   

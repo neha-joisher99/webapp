@@ -12,13 +12,19 @@ jobs:
 
     runs-on: ubuntu-latest
 
+    env:
+      DATABASE: ${{ secrets.DATABASE }}
+      USER: ${{ secrets.USER }}
+      PASSWORD: ${{ secrets.PASSWORD }}
+      HOST: ${{ secrets.HOST }}
+
     services:
       postgres:
         image: postgres:latest
         env:
-          POSTGRES_USER:  'nehajoisher'
-          POSTGRES_PASSWORD: 'neha'
-          POSTGRES_DB: 'dev_db'
+          POSTGRES_USER:  ${{ secrets.USER }}
+          POSTGRES_PASSWORD: ${{ secrets.PASSWORD }} 
+          POSTGRES_DB: ${{ secrets.DATABASE }}
         ports:
           - 5432:5432
     strategy:
@@ -30,6 +36,13 @@ jobs:
       - name: checkout
         uses: actions/checkout@v3
 
+      - name: configuration
+        run: |
+          touch .env
+          echo "DATABASE=$DATABASE" >> .env
+          echo "USER=$USER" >> .env
+          echo "PASSWORD=$PASSWORD" >> .env
+      
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v3
         with:
