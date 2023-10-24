@@ -29,13 +29,20 @@ jobs:
       - name: checkout
         uses: actions/checkout@v3
 
+      # - name: configuration
+      #   run: |
+      #       touch .env
+      #       echo DATABASE=${{ secrets.DATABASE }} >> .env
+      #       echo HOST=${{ secrets.HOST }} >> .env
+      #       echo USER=${{ secrets.USER }} >> .env
+      #       echo PASSWORD=${{ secrets.PASSWORD }} >> .env
       - name: configuration
         run: |
             touch .env
-            echo DATABASE=${{ secrets.DATABASE }} >> .env
-            echo HOST=${{ secrets.HOST }} >> .env
-            echo USER=${{ secrets.USER }} >> .env
-            echo PASSWORD=${{ secrets.PASSWORD }} >> .env
+            echo DATABASE=${{ env.DATABASE }} >> .env
+            echo USER=${{ env.USER }} >> .env
+            echo PASSWORD=${{ env.PASSWORD }} >> .env
+      
 
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v3
