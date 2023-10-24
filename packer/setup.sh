@@ -4,16 +4,15 @@ sudo apt-get upgrade -y
 sudo apt-get install -y nodejs npm postgresql unzip 
 sudo npm install -g nodemon
 
-echo "USER: $USER"
-echo "PASSWORD: $PASSWORD"
-echo "DATABASE: $DATABASE"
-sudo -u postgres psql -c "CREATE USER nehajoisher WITH PASSWORD 'neha';"
-sudo -u postgres psql -c "CREATE DATABASE $DATABASE;"
-sudo -u postgres psql -c "GRANT ALL PRIVILEGES ON DATABASE $DATABASE TO nehajoisher;"
-sudo -u postgres psql <<EOF
-\c $DATABASE
-GRANT CREATE ON SCHEMA public TO nehajoisher;
-EOF
+PASSWORD="${PASSWORD}"
+DATABASE="${DATABASE}"
+USER="${USER}"
+
+sudo -u postgres psql -c "CREATE USER ${USER} WITH PASSWORD '${PASSWORD}';"
+sudo -u postgres psql -c "CREATE DATABASE ${DATABASE};"
+sudo -u postgres psql -c "GRANT ALL PRIVILEGES DATABASE ${DATABASE} TO ${USER};"
+sudo -u postgres psql -c "\\c ${DATABASE}"
+sudo -u postgres psql -c "GRANT CREATE ON SCHEMA public TO ${USER};"
 
 sudo systemctl start postgresql
 sudo systemctl enable postgresql

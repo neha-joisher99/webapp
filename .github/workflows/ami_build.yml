@@ -11,19 +11,15 @@ jobs:
 
     runs-on: ubuntu-latest
 
+    env:
+      DATABASE: ${{ secrets.DATABASE }}
+      USER: ${{ secrets.USER }}
+      PASSWORD: ${{ secrets.PASSWORD }}
+      HOST: ${{ secrets.HOST }}
+
     steps:
       - name: checkout
         uses: actions/checkout@v3
-
-      - name: configuration
-        run: |
-            touch .env
-            echo PORT=${{ secrets.PORT }} >> .env
-            echo DATABASE=${{ secrets.DATABASE }} >> .env
-            echo HOST=${{ secrets.HOST }} >> .env
-            echo DIALECT=${{ secrets.DIALECT }} >> .env
-            echo USER=${{ secrets.USER }} >> .env
-            echo PASSWORD=${{ secrets.PASSWORD }} >> .env
 
       - name: Build zip
         working-directory: ${{ github.workspace }}
@@ -43,10 +39,13 @@ jobs:
               packer init .
               packer fmt .
               packer validate .
-              echo PORT=${{ secrets.PORT }} 
-              echo DATABASE=${{ secrets.DATABASE }} 
-              echo PASSWORD=${{ secrets.PASSWORD }} 
-              packer build -var "USER=${{ secrets.USER }}" -var "DATABASE=${{ secrets.DATABASE }}" -var "PASSWORD=${{ secrets.PASSWORD }}" aws-debian.pkr.hcl
+              packer build \
+              -var "USER=${{ env.USER }}" \
+              -var "DATABASE=${{ env.DATABASE }}" \
+              -var "PASSWORD=${{ env.PASSWORD }}" \
+              -var "HOST=${{ env.HOST }}" \
+              aws-debian.pkr.hcl
+  
 
 
 
