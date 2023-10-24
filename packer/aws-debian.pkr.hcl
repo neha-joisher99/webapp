@@ -50,7 +50,7 @@ variable "PASSWORD" {
 
 
 source "amazon-ebs" "debian-mywebapp" {
-  ami_users = [577217829277, 784594104829]
+  ami_users       = [577217829277, 784594104829]
   ami_name        = "csye6225_${formatdate("YYYY_MM_DD_hh_mm_ss", timestamp())}"
   ami_description = "Debian AMI for CSYE 6225"
   instance_type   = "t2.micro"
