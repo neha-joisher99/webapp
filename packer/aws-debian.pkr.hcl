@@ -83,7 +83,7 @@ build {
     environment_vars = [
       "PASSWORD=${var.PASSWORD}",
       "DATABASE=${var.DATABASE}",
-      "USER=${var.USER}"
+      "USER=${var.USER}",
       "HOST=${var.HOST}"
     ]
   }
