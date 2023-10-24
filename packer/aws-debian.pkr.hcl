@@ -22,11 +22,6 @@ variable "ssh_username" {
   default = "admin"
 }
 
-// variable "aws_profile" {
-//   type    = string
-//   default = "packer"
-// }
-
 variable "subnet_id" {
   type    = string
   default = "subnet-02b0c1b860ad092ee"
@@ -83,7 +78,7 @@ build {
     environment_vars = [
       "PASSWORD=${var.PASSWORD}",
       "DATABASE=${var.DATABASE}",
-      "USER=${var.DATABASE}"
+      "USER=${var.USER}"
     ]
   }
 
