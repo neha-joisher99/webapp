@@ -15,6 +15,7 @@ echo "${DATABASE}"
 echo "${HOST}"
 echo "${PASSWORD}"
 
+
 sudo -u postgres psql -c "CREATE USER ${USER} WITH PASSWORD '${PASSWORD}';"
 sudo -u postgres psql -c "CREATE DATABASE ${DATABASE};"
 sudo -u postgres psql -c "GRANT ALL PRIVILEGES ON DATABASE ${DATABASE} TO ${USER};"
