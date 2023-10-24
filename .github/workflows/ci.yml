@@ -39,15 +39,15 @@ jobs:
       - name: configuration
         run: |
             touch .env
-            echo DATABASE=${{ env.DATABASE }} >> .env
-            echo USER=${{ env.USER }} >> .env
-            echo PASSWORD=${{ env.PASSWORD }} >> .env
-
-      - name: print variables
+            echo "DATABASE=$DATABASE" >> .env
+            echo "USER=$USER" >> .env
+            echo "PASSWORD=$PASSWORD" >> .env
+  
+      - name: Print variables
         run: |
-                echo  "Hello $DATABASE"
-                echo "Hello $USER"
-                echo  "Hello $PASSWORD"
+            echo "Hello $DATABASE"
+            echo "Hi $USER"
+            echo "hi $PASSWORD"
       
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v3
