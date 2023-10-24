@@ -16,6 +16,7 @@ jobs:
       DATABASE: ${{ secrets.DATABASE }}
       USER: ${{ secrets.USER }}
       PASSWORD: ${{ secrets.PASSWORD }}
+      HOST: ${{ secrets.HOST }}
 
     services:
       postgres:
@@ -35,25 +36,12 @@ jobs:
       - name: checkout
         uses: actions/checkout@v3
 
-      # - name: configuration
-      #   run: |
-      #       touch .env
-      #       echo DATABASE=${{ secrets.DATABASE }} >> .env
-      #       echo HOST=${{ secrets.HOST }} >> .env
-      #       echo USER=${{ secrets.USER }} >> .env
-      #       echo PASSWORD=${{ secrets.PASSWORD }} >> .env
       - name: configuration
         run: |
           touch .env
           echo "DATABASE=$DATABASE" >> .env
           echo "USER=$USER" >> .env
           echo "PASSWORD=$PASSWORD" >> .env
-
-      - name: Print variables
-        run: |
-          echo "Hello $DATABASE"
-          echo "Hi $USER"
-          echo "hi $PASSWORD"
       
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v3
