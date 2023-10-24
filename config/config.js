@@ -8,8 +8,8 @@
 //   }
 // 
 
-require("dotenv").config({ path: '/etc/environment' });
-
+// require("dotenv").config({ path: '/etc/environment' });
+require("dotenv").config();
 
 module.exports = {
 

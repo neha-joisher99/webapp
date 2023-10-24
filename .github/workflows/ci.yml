@@ -42,8 +42,13 @@ jobs:
             echo DATABASE=${{ env.DATABASE }} >> .env
             echo USER=${{ env.USER }} >> .env
             echo PASSWORD=${{ env.PASSWORD }} >> .env
-      
 
+      - name: print variables
+        run: |
+                echo  "Hello $DATABASE"
+                echo "Hello $USER"
+                echo  "Hello $PASSWORD"
+      
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v3
         with:
