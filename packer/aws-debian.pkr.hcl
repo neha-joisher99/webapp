@@ -29,23 +29,23 @@ variable "subnet_id" {
 
 variable "USER" {
   type    = string
-  default = "${env("USER")}"
+  default = ""
 }
 
 variable "DATABASE" {
   type    = string
-  default = "${env("DATABASE")}"
+  default = ""
 }
 
 variable "HOST" {
   type    = string
-  default = "${env("HOST")}"
+  default = ""
 }
 
 
 variable "PASSWORD" {
   type    = string
-  default = "${env("PASSWORD")}"
+  default = ""
 }
 
 

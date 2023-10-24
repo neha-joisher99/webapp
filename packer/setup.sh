@@ -10,14 +10,10 @@ DATABASE="${DATABASE}"
 USER="${USER}"
 HOST="${HOST}"
 
-export PASSWORD
-export DATABASE
-export USER
-export HOST
-
 echo "${USER}"
 echo "${DATABASE}"
 echo "${HOST}"
+echo "${PASSWORD}"
 
 sudo -u postgres psql -c "CREATE USER ${USER} WITH PASSWORD '${PASSWORD}';"
 sudo -u postgres psql -c "CREATE DATABASE ${DATABASE};"
