@@ -15,6 +15,10 @@ export DATABASE
 export USER
 export HOST
 
+echo "${USER}"
+echo "${DATABASE}"
+echo "${HOST}"
+
 sudo -u postgres psql -c "CREATE USER ${USER} WITH PASSWORD '${PASSWORD}';"
 sudo -u postgres psql -c "CREATE DATABASE ${DATABASE};"
 sudo -u postgres psql -c "GRANT ALL PRIVILEGES ON DATABASE ${DATABASE} TO ${USER};"
