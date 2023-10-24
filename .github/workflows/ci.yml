@@ -11,6 +11,12 @@ jobs:
     name: webapp-ci
 
     runs-on: ubuntu-latest
+
+    env:
+      DATABASE: ${{ secrets.DATABASE }}
+      USER: ${{ secrets.USER }}
+      PASSWORD: ${{ secrets.PASSWORD }}
+
     services:
       postgres:
         image: postgres:latest
@@ -38,16 +44,16 @@ jobs:
       #       echo PASSWORD=${{ secrets.PASSWORD }} >> .env
       - name: configuration
         run: |
-            touch .env
-            echo "DATABASE=$DATABASE" >> .env
-            echo "USER=$USER" >> .env
-            echo "PASSWORD=$PASSWORD" >> .env
-  
+          touch .env
+          echo "DATABASE=$DATABASE" >> .env
+          echo "USER=$USER" >> .env
+          echo "PASSWORD=$PASSWORD" >> .env
+
       - name: Print variables
         run: |
-            echo "Hello $DATABASE"
-            echo "Hi $USER"
-            echo "hi $PASSWORD"
+          echo "Hello $DATABASE"
+          echo "Hi $USER"
+          echo "hi $PASSWORD"
       
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v3
