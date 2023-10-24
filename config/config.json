@@ -1,9 +1,0 @@
-{
-  "development": {
-    "username": "nehajoisher",
-    "password": "neha",
-    "database": "dev_db",
-    "host": "localhost",
-    "dialect": "postgres"
-  }
-}

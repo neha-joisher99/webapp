@@ -4,6 +4,7 @@ const { sequelize } = require('../models'); // Import the Sequelize instance
 
 router.all('', async (req, res) => {
   try {
+    
     // Check the database connectivity
     const isDatabaseConnected = await checkDatabaseConnectivity();
 

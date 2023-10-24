@@ -26,17 +26,6 @@ jobs:
             echo dialect=${{ secrets.DIALECT }} >> .env
             echo user=${{ secrets.USER }} >> .env
             echo password=${{ secrets.PASSWORD }} >> .env
-        
-    #   -  name: Install packer
-    #      run: |
-    #         wget https://releases.hashicorp.com/packer/1.7.4/packer_1.7.4_linux_amd64.zip
-    #         unzip -n packer_1.7.4_linux_amd64.zip
-    #         chmod +x packer
-    #         if [ -f /usr/local/bin/packer ]; then
-    #         sudo rm /usr/local/bin/packer
-    #         fi
-    #         sudo mv packer /usr/local/bin/
-    #         packer --version
 
       - name: Packer fmt
         run: |

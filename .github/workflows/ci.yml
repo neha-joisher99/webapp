@@ -11,14 +11,13 @@ jobs:
     name: webapp-ci
 
     runs-on: ubuntu-latest
-
     services:
       postgres:
         image: postgres:latest
         env:
-          POSTGRES_USER:  'nehajoisher'
-          POSTGRES_PASSWORD: 'neha'
-          POSTGRES_DB: 'dev_db'
+          POSTGRES_USER:  ${{ secrets.USER }}
+          POSTGRES_PASSWORD: ${{ secrets.PASSWORD }} 
+          POSTGRES_DB: ${{ secrets.DATABASE }}
         ports:
           - 5432:5432
     strategy:
