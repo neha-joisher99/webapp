@@ -1,3 +1,4 @@
+#!/bin/bash
 export DEBIAN_FRONTEND=noninteractive
 sudo apt-get update
 sudo apt-get upgrade -y
@@ -7,10 +8,16 @@ sudo npm install -g nodemon
 PASSWORD="${PASSWORD}"
 DATABASE="${DATABASE}"
 USER="${USER}"
+HOST="${HOST}"
+
+export PASSWORD
+export DATABASE
+export USER
+export HOST
 
 sudo -u postgres psql -c "CREATE USER ${USER} WITH PASSWORD '${PASSWORD}';"
 sudo -u postgres psql -c "CREATE DATABASE ${DATABASE};"
-sudo -u postgres psql -c "GRANT ALL PRIVILEGES DATABASE ${DATABASE} TO ${USER};"
+sudo -u postgres psql -c "GRANT ALL PRIVILEGES ON DATABASE ${DATABASE} TO ${USER};"
 sudo -u postgres psql -c "\\c ${DATABASE}"
 sudo -u postgres psql -c "GRANT CREATE ON SCHEMA public TO ${USER};"
 
