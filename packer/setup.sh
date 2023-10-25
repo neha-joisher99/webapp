@@ -29,13 +29,13 @@ sudo systemctl start postgresql
 sudo systemctl enable postgresql
 
 
-sudo mkdir /opt/csyee6225/webapp
+sudo mkdir /opt/csye6225/webapp
 # sudo chown -R csye6225:csye6225 /opt/webapp
-sudo mv /home/admin/webapp1.zip /opt/csyee6225/webapp/
-cd /opt/csyee6225/webapp/
+sudo mv /home/admin/webapp1.zip /opt/csye6225/webapp/
+cd /opt/csye6225/webapp/
 sudo unzip webapp1.zip
 
-source_path="/opt/csyee6225/webapp/users.csv"
+source_path="/opt/csye6225/webapp/users.csv"
 destination_path="/opt/"
 
 # Move the file if it exists
