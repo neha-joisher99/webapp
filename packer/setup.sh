@@ -19,8 +19,12 @@ echo "${PASSWORD}"
 sudo -u postgres psql -c "CREATE USER ${USER} WITH PASSWORD '${PASSWORD}';"
 sudo -u postgres psql -c "CREATE DATABASE ${DATABASE};"
 sudo -u postgres psql -c "GRANT ALL PRIVILEGES ON DATABASE ${DATABASE} TO ${USER};"
-sudo -u postgres psql -c "\\c ${DATABASE}"
-sudo -u postgres psql -c "GRANT CREATE ON SCHEMA public TO ${USER};"
+# sudo -u postgres psql -c "\\c ${DATABASE}"
+# sudo -u postgres psql -c "GRANT CREATE ON SCHEMA public TO ${USER};"
+sudo -u postgres psql <<EOF
+\c ${DATABASE}
+GRANT CREATE ON SCHEMA public TO ${USER};
+EOF
 
 sudo systemctl start postgresql
 sudo systemctl enable postgresql
