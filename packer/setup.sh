@@ -31,7 +31,7 @@ sudo systemctl enable postgresql
 sudo mkdir /opt/webapp
 sudo chown -R csye6225:csye6225 /opt/webapp
 sudo mv /home/admin/webapp1.zip /opt/webapp/
-cd opt/webapp/
+cd /opt/webapp/
 sudo unzip webapp1.zip
 
 source_path="/opt/webapp/users.csv"
