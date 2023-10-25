@@ -29,6 +29,7 @@ sudo systemctl start postgresql
 sudo systemctl enable postgresql
 
 
+
 sudo mkdir /opt/csye6225/
 sudo mkdir /opt/csye6225/webapp
 # sudo chown -R csye6225:csye6225 /opt/webapp
