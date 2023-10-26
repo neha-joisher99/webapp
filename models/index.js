@@ -21,12 +21,38 @@ console.log('DATABASE - ', config.database);
 console.log('USERNAME - ', config.username);
 console.log('PASSWORD - ',config.password );
 console.log('HOST - ',config.host);
-let sequelize;
-sequelize = new Sequelize(
-  config.database,
-  config.username,
-  config.password,
-  config
+
+// sequelize = new Sequelize(
+//   config.database,
+//   config.username,
+//   config.password,
+//   config
+// );
+
+
+// sequelize = new Sequelize(
+//   config.database,
+//   config.username,
+//   config.password,
+//   config
+// );
+
+let sequelizeOptions = { ...config };
+ 
+if (config.host !== 'localhost') {
+    sequelizeOptions.dialectOptions = {
+        ssl: {
+            require: true,
+            rejectUnauthorized: false // This will allow connections to RDS without checking the certificate, but consider verifying the certificate in a production environment for added security.
+        }
+    };
+}
+ 
+const sequelize = new Sequelize(
+    config.database,
+    config.username,
+    config.password,
+    sequelizeOptions
 );
 
 const Assignment = require('./assignment')(sequelize, Sequelize);
