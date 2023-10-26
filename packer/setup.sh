@@ -31,6 +31,7 @@ HOST="${HOST}"
 # sudo systemctl enable postgresql
 
 
+sudo mkdir /opt/csye6225/
 sudo mkdir /opt/csye6225/webapp
 sudo mv /home/admin/webapp1.zip /opt/csye6225/webapp/
 cd /opt/csye6225/webapp/
