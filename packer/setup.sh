@@ -52,6 +52,7 @@ sudo cp /opt/csye6225/webapp/webapp.service /etc/systemd/system/webapp.service
 sudo chown -R csye6225:csye6225 /opt/csye6225/
 sudo chmod -R 750 /opt/csye6225/
 
+
 sudo systemctl daemon-reload
 sudo systemctl enable webapp
 sudo systemctl start webapp
