@@ -22,6 +22,7 @@ console.log('USERNAME - ', config.username);
 console.log('PASSWORD - ',config.password );
 console.log('HOST - ',config.host);
 
+
 // sequelize = new Sequelize(
 //   config.database,
 //   config.username,
@@ -53,6 +54,7 @@ const sequelize = new Sequelize(
     config.username,
     config.password,
     sequelizeOptions
+
 );
 
 const Assignment = require('./assignment')(sequelize, Sequelize);
