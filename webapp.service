@@ -1,0 +1,15 @@
+[Unit]
+Description= My Webapp Service - Running the webapp on start
+After=cloud-init.service
+Wants=cloud-init.service
+
+[Service]
+Type=simple
+User=csye6225
+WorkingDirectory=/opt/csye6225/webapp
+ExecStart=/usr/bin/node /opt/csye6225/webapp/server.js
+Restart=on-failure
+RestartSec=5s
+
+[Install]
+WantedBy=multi-user.target
