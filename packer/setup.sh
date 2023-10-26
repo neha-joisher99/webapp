@@ -1,7 +1,9 @@
 #!/bin/bash
 export DEBIAN_FRONTEND=noninteractive
+
 sudo groupadd csye6225
 sudo useradd -s /bin/false -g csye6225 -d /opt/csye6225 -m csye6225
+
 sudo apt-get update
 sudo apt-get upgrade -y
 sudo apt-get install -y nodejs npm postgresql unzip 
@@ -31,7 +33,7 @@ HOST="${HOST}"
 # sudo systemctl enable postgresql
 
 
-sudo mkdir /opt/csye6225/
+
 sudo mkdir /opt/csye6225/webapp
 sudo mv /home/admin/webapp1.zip /opt/csye6225/webapp/
 cd /opt/csye6225/webapp/
@@ -46,12 +48,12 @@ destination_path="/opt/"
 [ -e "$source_path" ] && sudo mv "$source_path" "$destination_path" && echo "File 'users.csv' moved to '$destination_path'"
 
 sudo cp /opt/csye6225/webapp/webapp.service /etc/systemd/system/webapp.service
-cd /opt/csye6225/webapp/
 
-sudo chown -R user:usergrp /opt/csye6225/
+sudo chown -R csye6225:csye6225 /opt/csye6225/
 sudo chmod -R 750 /opt/csye6225/
+
 systemctl daemon-reload
-sudo systemctl enable csye6225
-sudo systemctl start csye6225
+sudo systemctl enable webapp
+sudo systemctl start webapp
 
 

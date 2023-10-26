@@ -7,7 +7,7 @@ Wants=cloud-init.service
 Type=simple
 User=csye6225
 WorkingDirectory=/opt/csye6225/webapp
-ExecStart=/usr/bin/node /opt/csye6225/webapp/server.js
+ExecStart=/usr/bin/node /opt/csye6225/webapp/ && sudo npm start
 Restart=on-failure
 RestartSec=5s
 

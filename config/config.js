@@ -11,12 +11,12 @@
 // require("dotenv").config({ path: '/etc/environment' });
 require("dotenv").config();
 
-module.exports = {
+const config = {
+  host: process.env.HOST,
+  username: process.env.USER,
+  password: process.env.PASSWORD,
+  database: process.env.DATABASE,
+  dialect: "postgres",
+};
 
-    host: process.env.HOST,
-    username: process.env.USER,
-    password: process.env.PASSWORD,
-    database: process.env.DATABASE,
-    dialect: "postgres",
-  }
-  
+module.exports = config;
