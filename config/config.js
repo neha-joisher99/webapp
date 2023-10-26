@@ -13,7 +13,7 @@ require("dotenv").config();
 
 const config = {
   host: process.env.HOST,
-  username: process.env.USER,
+  username: process.env.USERNAME,
   password: process.env.PASSWORD,
   database: process.env.DATABASE,
   dialect: "postgres",
