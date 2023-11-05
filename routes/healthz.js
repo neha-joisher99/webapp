@@ -5,7 +5,7 @@ const logger=require('../logger/index.js')
 
 
 router.all('', async (req, res) => {
-  client.increment('Get-Healthz')
+
   try {
     const isDatabaseConnected = await checkDatabaseConnectivity();
 
