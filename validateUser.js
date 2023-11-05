@@ -1,11 +1,13 @@
 const basicAuth = require('basic-auth');
 const db = require('./models');
 const bcrypt = require('bcrypt');
+const logger=require('./logger/index.js')
 
 async function validateUser(req, res, next) {
   const credentials = basicAuth(req);
 
   if (!credentials || !credentials.name || !credentials.pass) {
+    logger.error(`Unauthorized User: Missing credentials`)
     return res.status(401).json({ message: 'Unauthorized: Missing credentials' });
   }
 
@@ -16,12 +18,14 @@ async function validateUser(req, res, next) {
     const user = await db.account.findOne({ where: { email: username } });
 
     if (!user) {
+      logger.error(`Authentication failed for ${username}: User not found`)
       return res.status(401).json({ message: 'Authentication failed: User not found' });
     }
 
     const passwordMatch = await bcrypt.compare(password, user.password);
 
     if (!passwordMatch) {
+      logger.error(`Authentication failed for ${username}: Incorrect password`)
       return res.status(401).json({ message: 'Authentication failed: Incorrect password' });
     }
     
