@@ -5,6 +5,7 @@ const Sequelize = require('sequelize');
 const db = require('./models');
 const path=require('path');
 const account = require('./models/account');
+const logger=require('./logger/index.js')
 
 const loadUserDataFromCSV = async () => {
   try {
@@ -40,9 +41,10 @@ const loadUserDataFromCSV = async () => {
         await db.account.create({ firstname, lastname, email, password });
         processedEmails.add(email); // Add the email to the set to avoid duplicates
       }
-
+       logger.info('CSV data loaded and inserted successfully.')
        console.log('CSV data loaded and inserted successfully.');
       }catch(error){
+        logger.error(`Error in loading CSV data : ${error}`)
         console.log('error in loading', error)
       }
     }
