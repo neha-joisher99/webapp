@@ -2,8 +2,7 @@ const express = require('express');
 const router = express.Router();
 const { sequelize } = require('../models'); // Import the Sequelize instance
 const logger=require('../logger/index.js')
-const statsd = require('node-statsd')
-const client = new statsd({ host : 'localhost', port : 8125})
+
 
 router.all('', async (req, res) => {
   client.increment('Get-Healthz')
