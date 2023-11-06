@@ -27,7 +27,7 @@ const logger = createLogger({
     timestamp(),
     prettyPrint()
   ),}),
-  new transports.File({ filename: `${appRoot}/logs/combined.log`, level: 'info',handleExceptions: true,   format: combine(
+  new transports.File({ filename: `/var/log/combined.log`, level: 'info',handleExceptions: true,   format: combine(
     timestamp(),
     prettyPrint()
   ), }),
