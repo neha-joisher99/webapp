@@ -36,6 +36,7 @@ sudo mv /opt/csye6225/webapp/statsd/config.json /opt/aws/
 sudo chown -R csye6225:csye6225 /opt/csye6225/
 sudo chmod -R 750 /opt/csye6225/
 
+
 sudo systemctl daemon-reload
 sudo systemctl enable webapp
 sudo systemctl start webapp
