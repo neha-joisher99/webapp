@@ -1,11 +1,11 @@
 const express= require('express');
 const  User  = require('../models').User
 const logger=require('../logger/index.js')
-const statsd = require('node-statsd')
-const client = new statsd({ host : 'localhost', port : 8125})
+// const statsd = require('node-statsd')
+// const client = new statsd({ host : 'localhost', port : 8125})
 
 const postUsers= async(req,res)=>{
-    client.increment('post-user')
+   // client.increment('post-user')
     const {first_name, last_name, email, password} = req.body
     try{
         const user = User.create({first_name, last_name, email, password})
@@ -19,7 +19,7 @@ const postUsers= async(req,res)=>{
 }
 
 const getUsers= async(req,res)=>{
-client.increment('get-user')
+//client.increment('get-user')
    try{ 
     User.findAll()
    }catch(err){
