@@ -6,7 +6,11 @@ const statsd = require('node-statsd')
 const client = new statsd({ host : 'localhost', port : 8125})
 
 router.all('', async (req, res) => {
+
  client.increment('API Healthz');
+
+//  client.increment('API Healthz');
+
   try {
     const isDatabaseConnected = await checkDatabaseConnectivity();
 
