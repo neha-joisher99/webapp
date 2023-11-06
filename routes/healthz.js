@@ -6,7 +6,7 @@ const logger=require('../logger/index.js')
 // const client = new statsd({ host : 'localhost', port : 8125})
 
 router.all('', async (req, res) => {
-
+//  client.increment('API Healthz');
   try {
     const isDatabaseConnected = await checkDatabaseConnectivity();
 
