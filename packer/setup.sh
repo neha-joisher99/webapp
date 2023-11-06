@@ -31,9 +31,14 @@ destination_path="/opt/"
 
 sudo mv /opt/csye6225/webapp/webapp.service /etc/systemd/system/webapp.service
 sudo mv /opt/csye6225/webapp/statsd/config.json /opt/aws/
+sudo mv /opt/csye6225/webapp/logs/combined.log /var/log/combined.log
 
-sudo chown -R csye6225:csye6225 /opt/csye6225/
-sudo chmod -R 750 /opt/csye6225/
+if [ $? -eq 0 ]; then
+  echo "file combined.log  moved to /var/log/combined.log"
+fi
+
+# sudo chown -R csye6225:csye6225 /opt/csye6225/
+# sudo chmod -R 750 /opt/csye6225/
 
 sudo systemctl daemon-reload
 sudo systemctl enable amazon-cloudwatch-agent
