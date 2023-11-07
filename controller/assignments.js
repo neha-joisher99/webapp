@@ -5,12 +5,19 @@ app.use(bodyParser.json()); // Parse JSON request bodies
 app.use(bodyParser.urlencoded({ extended: true }));
 const db = require('../models');
 const logger=require('../logger/index.js')
-// const statsd = require('node-statsd')
-// const client = new statsd({ host : 'localhost', port : 8125})
+const StatsD = require('node-statsd');
 
-
+const client = new StatsD({
+  errorHandler: function (error) {
+    logger.error("StatsD error: ", error); // Using logger instead of console.error
+  }
+});
+client.socket.on('error', function(error) {
+    logger.error("Error in socket: ", error); // Using logger instead of console.error
+  });
+  
 const getAssignemnts = (autheticate)= async (req, res) =>{
-  //client.increment('get-assignment')
+  client.increment('getAll-assignment')
     try{
       const contentLength = req.get('Content-Length');
       console.log(contentLength)
@@ -44,7 +51,7 @@ const getAssignemnts = (autheticate)= async (req, res) =>{
 }
 
 const postAssignemnts=(authenticate)= async(req,res)=>{ 
- // client.increment('post-assignment')
+  client.increment('post-assignment')
   console.log(req.query)
   console.log(req.body)
   console.log(!req.body)
@@ -107,7 +114,7 @@ const postAssignemnts=(authenticate)= async(req,res)=>{
 
 
   const deleteAssignments=(autheticate)=async(req,res)=>{
-   // client.increment('delete-assignment')
+   client.increment('delete-assignment')
     console.log('in delete')
     console.log(req.query)
     console.log(req.body)
@@ -154,7 +161,7 @@ const postAssignemnts=(authenticate)= async(req,res)=>{
 
 
 const getAssignment=(autheticate)=async(req,res)=>{
-  //client.increment('get-assignment')
+  client.increment('get-assignment')
   console.log('in get:id')
 
   console.log(req.query)
@@ -209,7 +216,7 @@ const getAssignment=(autheticate)=async(req,res)=>{
 }
 
 const patchAssignment=(autheticate)=async(req,res)=>{
-  //client.increment('patch-assignment')
+  client.increment('patch-assignment')
   logger.error(`API Assignments - Request Patch - Method Not allowed `)
   return res.status(405).send();
 }
@@ -219,7 +226,7 @@ const patchAssignment=(autheticate)=async(req,res)=>{
 
 
 const putAssignemnts=(autheticate)=async(req,res)=>{
- // client.increment('put-assignment')
+ client.increment('put-assignment')
   console.log('In put')
   const assignmentIdPUT = req.params.id;   // assignment-id from paramaters
   console.log('assignmentIdPUT :', assignmentIdPUT)
@@ -300,7 +307,7 @@ const putAssignemnts=(autheticate)=async(req,res)=>{
 }
 
 const patchAssignmentwithId=(autheticate)=async(req,res)=>{
-  //client.increment('patch-assignment')
+  client.increment('patch-assignment')
   logger.error(`API Assignments - Request Patch - Method Not allowed `)
   return res.status(405).send();
 }

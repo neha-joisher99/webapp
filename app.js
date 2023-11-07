@@ -21,19 +21,19 @@ const client = new StatsD({
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.use((req, res, next) => {
-  logger.info('Incrementing in statsd counter'); // Using logger instead of console.log
-  client.increment('api_call', 1, [`method:${req.method}`, `path:${req.path}`]);
-  next();
-  res.on('finish', () => {
-    logger.info('All middleware completed their execution for', req.path);
-  });
+// app.use((req, res, next) => {
+//   logger.info('Incrementing in statsd counter'); // Using logger instead of console.log
+//   client.increment('api_call', 1, [`method:${req.method}`, `path:${req.path}`]);
+//   next();
+//   res.on('finish', () => {
+//     logger.info('All middleware completed their execution for', req.path);
+//   });
 
-});
+// });
 
-client.socket.on('error', function(error) {
-  logger.error("Error in socket: ", error); // Using logger instead of console.error
-});
+// client.socket.on('error', function(error) {
+//   logger.error("Error in socket: ", error); // Using logger instead of console.error
+// });
 
 // Routes
 app.use('/assignments', router);
