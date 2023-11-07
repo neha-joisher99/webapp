@@ -5,7 +5,7 @@ const logger=require('../logger/index.js')
 
 console.log('INNNN ')
 router.all('', async (req, res) => {
-  console.log('router.all ')
+console.log('router.all ')
   try {
     console.log('try')
     const isDatabaseConnected = await checkDatabaseConnectivity();
