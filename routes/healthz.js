@@ -2,14 +2,12 @@ const express = require('express');
 const router = express.Router();
 const { sequelize } = require('../models'); // Import the Sequelize instance
 const logger=require('../logger/index.js')
-const statsd = require('node-statsd')
-const client = new statsd({ host : 'localhost', port : 8125})
 
+console.log('INNNN ')
 router.all('', async (req, res) => {
-  client.increment('API Healthz');
-  client.close();
-
+console.log('router.all ')
   try {
+    console.log('try')
     const isDatabaseConnected = await checkDatabaseConnectivity();
     const contentLength = req.get('Content-Length');
     if (req.method !== 'GET') {
@@ -40,6 +38,7 @@ router.all('', async (req, res) => {
       res.setHeader('Content-Length', '0');
       logger.info('API healthz - Database connected successfully! ')
       res.status(200).send();
+      console.log('200')
     } else {
       // Database connection error, return a 503 status code
       res.setHeader('Cache-Control', 'no-cache');
@@ -49,6 +48,7 @@ router.all('', async (req, res) => {
     }
   } catch (error) {
     // Handle other errors as needed
+    console.log(error)
     res.setHeader('Cache-Control', 'no-cache');
     res.setHeader('Content-Length', '0');
     logger.error('API healthz - Database API unavailable!')
@@ -59,8 +59,10 @@ router.all('', async (req, res) => {
 async function checkDatabaseConnectivity() {
   try {
     await sequelize.authenticate();
+    console.log('In true');
     return true;
   } catch (error) {
+    console.log(error)
     return false;
   }
 }
