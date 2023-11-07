@@ -8,6 +8,7 @@ const client = new statsd({ host : 'localhost', port : 8125})
 router.all('', async (req, res) => {
   client.increment('API Healthz');
   client.close();
+
   try {
     const isDatabaseConnected = await checkDatabaseConnectivity();
     const contentLength = req.get('Content-Length');
