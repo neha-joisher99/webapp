@@ -2,10 +2,21 @@ const express = require('express');
 const router = express.Router();
 const { sequelize } = require('../models'); // Import the Sequelize instance
 const logger=require('../logger/index.js')
+const StatsD = require('node-statsd');
+
+const client = new StatsD({
+  errorHandler: function (error) {
+    logger.error("StatsD error: ", error); // Using logger instead of console.error
+  }
+});
+client.socket.on('error', function(error) {
+    logger.error("Error in socket: ", error); // Using logger instead of console.error
+  });
 
 console.log('INNNN ')
 router.all('', async (req, res) => {
 console.log('router.all ')
+client.increment('healthz')
   try {
     console.log('try')
     const isDatabaseConnected = await checkDatabaseConnectivity();
