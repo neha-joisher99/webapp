@@ -2,14 +2,15 @@ const express = require('express');
 const router = express.Router();
 const { sequelize } = require('../models'); // Import the Sequelize instance
 const logger=require('../logger/index.js')
-// const statsd = require('node-statsd')
-// const client = new statsd({ host : 'localhost', port : 8125})
+const statsd = require('node-statsd')
+const client = new statsd({ host : 'localhost', port : 8125})
 
 router.all('', async (req, res) => {
-//  client.increment('abv');
+  client.increment('API Healthz');
+  client.close();
+
   try {
     const isDatabaseConnected = await checkDatabaseConnectivity();
-
     const contentLength = req.get('Content-Length');
     if (req.method !== 'GET') {
       res.setHeader('Cache-Control', 'no-cache');
