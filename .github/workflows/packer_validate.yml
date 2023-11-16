@@ -31,8 +31,8 @@ jobs:
         run: |
           pwd
           cd packer/
-          packer init .
-          packer fmt -check .
+          packer init aws-debian.pkr.hcl
+          packer fmt -check aws-debian.pkr.hcl
           if [ $? -ne 0 ]; then
             echo "Packer template formatting check failed."
             exit 1
@@ -42,7 +42,7 @@ jobs:
         run: |
           pwd
           cd packer/
-          packer validate .
+          packer validate -var-file="variables.pkrvars.hcl" aws-debian.pkr.hcl
           if [ $? -ne 0 ]; then
             echo "Packer template validation failed."
             exit 1 
