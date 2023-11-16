@@ -78,42 +78,42 @@ variable "provisioner_users_source" {
   type    = string
   default = null
 }
- 
+
 variable "provisioner_users_destination" {
   type    = string
   default = null
 }
- 
+
 variable "provisioner_webapp_source" {
   type    = string
   default = null
 }
- 
+
 variable "provisioner_webapp_destination" {
   type    = string
   default = null
 }
- 
+
 variable "provisioner_service_source" {
   type    = string
   default = null
 }
- 
+
 variable "provisioner_service_destination" {
   type    = string
   default = null
 }
- 
+
 variable "provisioner_shell_script" {
   type    = string
   default = null
 }
- 
+
 variable "provisioner_config_source" {
   type    = string
   default = null
 }
- 
+
 variable "provisioner_config_destination" {
   type    = string
   default = null
@@ -130,15 +130,15 @@ source "amazon-ebs" "debian-mywebapp" {
   // ssh_username    = "${var.ssh_username}"
   // subnet_id       = "${var.subnet_id}"
   // ssh_agent_auth  = false
-    ami_users       = [577217829277, 784594104829]
-    ami_name        = "csye6225_${formatdate("YYYY_MM_DD_hh_mm_ss", timestamp())}"
-    ami_description = "${var.ami_description}"
-    instance_type   = "${var.instance_type}"
-    region          = "${var.aws_region}"
-    source_ami      = "${var.source_ami}"
-    ssh_username    = "${var.ssh_username}"
-    subnet_id       = "${var.subnet_id}"
-    ssh_agent_auth  = false
+  ami_users       = [577217829277, 784594104829]
+  ami_name        = "csye6225_${formatdate("YYYY_MM_DD_hh_mm_ss", timestamp())}"
+  ami_description = "${var.ami_description}"
+  instance_type   = "${var.instance_type}"
+  region          = "${var.aws_region}"
+  source_ami      = "${var.source_ami}"
+  ssh_username    = "${var.ssh_username}"
+  subnet_id       = "${var.subnet_id}"
+  ssh_agent_auth  = false
 
 
   launch_block_device_mappings {
@@ -148,7 +148,7 @@ source "amazon-ebs" "debian-mywebapp" {
     // volume_type           = "gp2"
     device_name           = "${var.device_name}"
     delete_on_termination = true
-    volume_size           = "${var.volume_size }"
+    volume_size           = "${var.volume_size}"
     volume_type           = "${var.volume_type}"
 
   }
@@ -171,10 +171,10 @@ build {
   //   source      = "users.csv"
   //   destination = "/home/admin/users.csv"
   // }
-  
-    provisioner "file" {
-        source      = "${var.provisioner_users_source}"
-        destination = "${var.provisioner_users_destination}"
+
+  provisioner "file" {
+    source      = "${var.provisioner_users_source}"
+    destination = "${var.provisioner_users_destination}"
   }
 
   // provisioner "file" {
@@ -182,26 +182,26 @@ build {
   //   destination = "/home/admin/webapp.service"
   // }
 
-    provisioner "file" {
-      source      = "${var.provisioner_service_source}"
-      destination = "${var.provisioner_service_destination}"
+  provisioner "file" {
+    source      = "${var.provisioner_service_source}"
+    destination = "${var.provisioner_service_destination}"
   }
- 
+
 
   // provisioner "file" {
   //   source      = "/statsd/config.json"
   //   destination = "/home/admin/config.json"
   // }
 
-    provisioner "file" {
-        source      = "${var.provisioner_config_source}"
-        destination = "${var.provisioner_config_destination}"
+  provisioner "file" {
+    source      = "${var.provisioner_config_source}"
+    destination = "${var.provisioner_config_destination}"
   }
 
   provisioner "shell" {
     //script = "./setup.sh"
-      script ="${var.provisioner_shell_script}"
-      environment_vars = [
+    script = "${var.provisioner_shell_script}"
+    environment_vars = [
       "PASSWORD=${var.PASSWORD}",
       "DATABASE=${var.DATABASE}",
       "USER=${var.USER}",
