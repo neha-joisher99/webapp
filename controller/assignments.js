@@ -143,6 +143,12 @@ const postAssignemnts=(authenticate)= async(req,res)=>{
         where: { id: assignmentIdDeleteMapp }
       });
   
+      if (!assignment) {
+              logger.info(`API Assignment - Request delete - Assignement ${assignment.id} not found!`)
+              return res.status(404).json();
+            }
+        
+
       if (assignment !== null) {
         if (assignment.accountId==req.user.id){
             await assignment.destroy();
