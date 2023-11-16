@@ -23,14 +23,14 @@ sudo npm audit fix
 sudo npm install
 
 
-source_path="/opt/csye6225/webapp/users.csv"
+source_path="/home/admin/users.csv"
 destination_path="/opt/"
 
 # Move the file if it exists
 [ -e "$source_path" ] && sudo mv "$source_path" "$destination_path" && echo "File 'users.csv' moved to '$destination_path'"
 
-sudo mv /opt/csye6225/webapp/webapp.service /etc/systemd/system/webapp.service
-sudo mv /opt/csye6225/webapp/statsd/config.json /opt/aws/
+sudo mv /home/admin/webapp.service /etc/systemd/system/webapp.service
+sudo mv /home/admin/config.json  /opt/aws/
 
 
 sudo chown -R csye6225:csye6225 /opt/csye6225/

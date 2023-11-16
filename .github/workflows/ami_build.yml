@@ -54,6 +54,7 @@ jobs:
               -var "DATABASE=${{ env.DATABASE }}" \
               -var "PASSWORD=${{ env.PASSWORD }}" \
               -var "HOST=${{ env.HOST }}" \
+              -var-file="variables.pkrvars.hcl"\
               aws-debian.pkr.hcl
   
 
