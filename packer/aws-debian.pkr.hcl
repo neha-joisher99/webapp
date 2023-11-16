@@ -201,12 +201,12 @@ build {
   provisioner "shell" {
     //script = "./setup.sh"
     script = "${var.provisioner_shell_script}"
-    environment_vars = [
-      "PASSWORD=${var.PASSWORD}",
-      "DATABASE=${var.DATABASE}",
-      "USER=${var.USER}",
-      "HOST=${var.HOST}"
-    ]
+    // environment_vars = [
+    //   "PASSWORD=${var.PASSWORD}",
+    //   "DATABASE=${var.DATABASE}",
+    //   "USER=${var.USER}",
+    //   "HOST=${var.HOST}"
+    // ]
   }
 
 
