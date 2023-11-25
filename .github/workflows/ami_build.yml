@@ -46,15 +46,10 @@ jobs:
       - name: Run packer
         run: | 
               cd packer/
-              packer init .
-              packer fmt .
-              packer validate .
-              packer build \
-              -var "USER=${{ env.USER }}" \
-              -var "DATABASE=${{ env.DATABASE }}" \
-              -var "PASSWORD=${{ env.PASSWORD }}" \
-              -var "HOST=${{ env.HOST }}" \
-              aws-debian.pkr.hcl
+              packer init aws-debian.pkr.hcl
+              packer fmt aws-debian.pkr.hcl
+              packer validate -var-file="variables.pkrvars.hcl" aws-debian.pkr.hcl
+              packer build -var-file="variables.pkrvars.hcl" aws-debian.pkr.hcl
   
 
 
