@@ -6,15 +6,14 @@ const {
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class account extends Model {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
-    static associate({assignments}) {
+
+    static associate(models) {
       // define association here
-      this.hasMany(assignments)
+      this.hasMany(models.assignments, { foreignKey: 'accountId' });
+      //this.hasMany(models.submission, { foreignKey: 'accountId' });
     }
+
+
   }
   account.init({
     id: {
