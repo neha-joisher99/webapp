@@ -7,6 +7,17 @@ const db = require('../models');
 const logger=require('../logger/index.js')
 const StatsD = require('node-statsd');
 
+const AWS = require('aws-sdk');
+
+// Configure AWS with your credentials and region
+AWS.config.update({
+  accessKeyId: 'YOUR_AWS_ACCESS_KEY_ID',
+  secretAccessKey: 'YOUR_AWS_SECRET_ACCESS_KEY',
+  region: 'YOUR_AWS_REGION'
+});
+
+const sns = new AWS.SNS();
+
 const client = new StatsD({
   errorHandler: function (error) {
     logger.error("StatsD error: ", error); // Using logger instead of console.error
@@ -125,12 +136,11 @@ const postAssignemnts=(authenticate)= async(req,res)=>{
     }
         const contentLength = req.get('Content-Length');
 
-        if (contentLength>0 ){
-          const requestBody = JSON.stringify(req.body);
-          logger.error(`API Assignments - Request delete - Bad request - contains body - ${requestBody}`);
-          return res.status(400).send();
-        }
-      
+    if (contentLength>0 ){
+        const requestBody = JSON.stringify(req.body);
+        logger.error(`API Assignments - Request delete - Bad request - contains body - ${requestBody}`);
+        return res.status(400).send();
+    }
 
     console.log(req.user.id)
     const assignmentIdDeleteMapp = req.params.id;
@@ -158,6 +168,11 @@ const postAssignemnts=(authenticate)= async(req,res)=>{
       res.status(404).send(); 
     }
   }  
+
+  const deleteAssignmentsWithoutID=(autheticate)=async(req,res)=>{
+      logger.error(`API Assignments - Request delete - Bad request - No Assignment ID specified in path paramter`);
+      return res.status(400).send('No Assignment ID specified in path parameter');
+  }
 
 
 const getAssignment=(autheticate)=async(req,res)=>{
@@ -306,6 +321,13 @@ const putAssignemnts=(autheticate)=async(req,res)=>{
 }
 }
 
+
+
+const putAssignmentsWithoutID=(autheticate)=async(req,res)=>{
+  logger.error(`API Assignments - Request put - Bad request - No Assignment ID specified in path paramter`);
+  return res.status(400).send('No Assignment ID specified in path parameter');
+}
+
 const patchAssignmentwithId=(autheticate)=async(req,res)=>{
   client.increment('patch-assignment')
   logger.error(`API Assignments - Request Patch - Method Not allowed `)
@@ -313,7 +335,135 @@ const patchAssignmentwithId=(autheticate)=async(req,res)=>{
 }
 
 
+const postAssignemntSubmission=(autheticate)=async(req,res)=>{
+  console.log("IN submission")
+  client.increment('post-assignment-Submission')
+  const contentLength = req.get('Content-Length');
+  const assignmentId= req.params.id;
+  if (Object.keys(req.query).length > 0) {
+    logger.error(`API Assignments - Request post Submission - Bad request query paramaters ${req.query}`);
+    return res.status(400).send('Unexpected query parameters');
+  }
+  if (contentLength===0 || Object.keys(req.body).length === 0 || !req.body ){
+    logger.error(`API Assignments - Request post Submission - Bad request - Empty Body`);
+    return res.status(400).send('Request body is empty');
+  }
+
+  if ( !req.params.id ){
+    logger.error(`API Assignments - Request post Submission - Bad request - No Assignment ID specified in path paramter`);
+    return res.status(400).send('No Assignment ID specified in path parameter');
+  }
+
+  const {submission_url} = req.body
+  const bodyKeys = Object.keys(req.body);
+
+  if (bodyKeys.length !== 1 || !submission_url) {
+    logger.error(`API Assignments - Request post - Submission - Bad request - Invalid request body`);
+    return res.status(400).send('Request body must contain only the submission URL');
+  }
+  let assignment=null;
+  console.log(req.params.id)
+  //check if assignmenet does not exist
+  try {
+
+    console.log('in try')
+     assignment = await db.assignments.findOne({
+      where: { id: req.params.id }
+    });
+    console.log(assignment)
+
+    if (assignment == null){
+      logger.error(`API Assignment - Request post Submission - Assignement  ${req.params.id} not found!`)
+      res.status(404).send(); 
+    }
+    console.log(assignment.accountId)
+    console.log(req.user.id)
+    if (assignment !== null) {
+      if (assignment.accountId==req.user.id){
+        console.log('inside loop')
+        const currentDate = new Date();
+        const deadline = new Date(assignment.deadline);
+
+        const submissionsCount = await db.submission.count({
+          where: { assignmentId: req.params.id }
+        });
+
+        console.log(submissionsCount)
+        console.log(assignment.num_of_attempts)
+
+        if (submissionsCount >= assignment.num_of_attempts) {
+          logger.error(`API Assignment - Exceeded the number of submission attempts.`);
+          return res.status(400).send('Exceeded the number of submission attempts');
+        }
+
+          if (currentDate > deadline) {
+            logger.error(`API Assignment - Submission deadline has passed.`);
+            return res.status(400).send('Submission deadline has passed');
+          }
+          const accountExists = await db.account.findByPk(req.user.id);
+          if (!accountExists) {
+            return res.status(404).send('Account does not exist');
+          }
+
+          const newSubmission = await db.submission.create({
+            submission_url: req.body.submission_url,
+            assignment_id: req.params.id,
+            submission_date: currentDate.toISOString(),
+            submission_updated: currentDate.toISOString(),
+            assignmentId: req.params.id,
+          });
+
+          const reorderedAssignmentData = {
+            id: newSubmission.id,
+            assignment_id: newSubmission.assignmentId,
+            submission_url: newSubmission.submission_url,
+            submission_date: newSubmission.submission_date,
+            submission_updated: newSubmission.submission_updated,
+          };
+
+            logger.info('API Assignments - Request post - Submission posted successfully!')
+            res.status(201).json(reorderedAssignmentData);
+            
+            const message = {
+              default: `New submission: ${newSubmission.submission_url}, User Email: ${req.user.email}`,
+              email: `New submission: ${newSubmission.submission_url}, User Email: ${req.user.email}`
+            };
+        
+            const params = {
+              Message: JSON.stringify(message),
+              TopicArn: process.env.TopicArn,
+              MessageStructure: 'json'
+            };
+        
+            sns.publish(params, (err, data) => {
+              if (err) {
+                console.error("Error publishing to SNS topic:", err);
+                return res.status(500).send('Error in SNS publishing.');
+              } else {
+                console.log("Successfully published to SNS topic:", data);
+                return res.status(200).send('Successfully published to SNS topic');
+              }
+            });
+
+      }else {
+        logger.error(`API Assignment - Request post Submission - User ${req.user.id} is trying to create a submission for user ${assignment.accountId}. Action Forbidden`)
+        res.status(403).send()
+      }
+     } 
+  } catch (SequelizeDatabaseError) {
+    console.log(SequelizeDatabaseError)
+  }
+}  
 
 
-module.exports={ getAssignemnts, postAssignemnts, getAssignment, deleteAssignments,patchAssignment, putAssignemnts, patchAssignmentwithId}
+
+const postAssignemntSubmissionWithoutID=(autheticate)=async(req,res)=>{
+  logger.error(`API Assignments - Request post Submission - Bad request - No Assignment ID specified in path paramter`);
+  return res.status(400).send('No Assignment ID specified in path parameter');
+}
+
+
+
+
+module.exports={ getAssignemnts, postAssignemnts, getAssignment, deleteAssignments,patchAssignment, putAssignemnts, patchAssignmentwithId, postAssignemntSubmission,deleteAssignmentsWithoutID, putAssignmentsWithoutID, postAssignemntSubmissionWithoutID}
 
