@@ -435,7 +435,7 @@ const postAssignemntSubmission=(autheticate)=async(req,res)=>{
               email: `New submission: ${newSubmission.submission_url}, User Email: ${req.user.email}`
             };
             
-            logger.info(message)
+            logger.info(message.email)
             const params = {
               Message: JSON.stringify(message),
               TopicArn: process.env.TopicArn,
@@ -445,10 +445,10 @@ const postAssignemntSubmission=(autheticate)=async(req,res)=>{
             sns.publish(params, (err, data) => {
               if (err) {
                   logger.error("Error publishing to SNS topic:", err);
-                  return res.status(500).send('Error in SNS publishing.');
+                 
               } else {
                   logger.info("Successfully published to SNS topic:", data);
-                  res.status(201).json(reorderedAssignmentData); // Send response here after successful publish
+                  
               }
           });
         
