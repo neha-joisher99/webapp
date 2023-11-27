@@ -428,16 +428,22 @@ const postAssignemntSubmission=(autheticate)=async(req,res)=>{
             logger.info('API Assignments - Request post - Submission posted successfully!')
             res.status(201).json(reorderedAssignmentData);
             
-            const message = {
-              default: `New submission: ${newSubmission.submission_url}, User Email: ${req.user.email}`,
-              email: `New submission: ${newSubmission.submission_url}, User Email: ${req.user.email}`
-            };
+            // const message = {
+            //   default: `New submission: ${newSubmission.submission_url}, User Email: ${req.user.email}`,
+            //   email: `New submission: ${newSubmission.submission_url}, User Email: ${req.user.email}`
+            // };
+
+            const messageContent = {
+              submissionUrl: newSubmission.submission_url,
+              userEmail: req.user.email
+          };
             
-            logger.info(message.email)
+            logger.info(messageContent.submissionUrl)
+            logger.info(messageContent.userEmail)
             const params = {
-              Message: JSON.stringify(message),
+              Message: JSON.stringify(messageContent),
               TopicArn: process.env.TopicArn,
-              MessageStructure: 'json'
+             // MessageStructure: 'json'
             };
 
             sns.publish(params, (err, data) => {
