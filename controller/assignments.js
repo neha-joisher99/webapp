@@ -11,7 +11,7 @@ const AWS = require('aws-sdk');
 
 // Configure AWS with your credentials and region
 AWS.config.update({
-  region: process.env.aws_region
+  region: 'us-east-1'
 });
 
 const sns = new AWS.SNS();
@@ -468,8 +468,4 @@ const postAssignemntSubmissionWithoutID=(autheticate)=async(req,res)=>{
   return res.status(400).send('No Assignment ID specified in path parameter');
 }
 
-
-
-
 module.exports={ getAssignemnts, postAssignemnts, getAssignment, deleteAssignments,patchAssignment, putAssignemnts, patchAssignmentwithId, postAssignemntSubmission,deleteAssignmentsWithoutID, putAssignmentsWithoutID, postAssignemntSubmissionWithoutID}
-
