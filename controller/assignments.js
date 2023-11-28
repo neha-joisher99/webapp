@@ -435,21 +435,19 @@ const postAssignemntSubmission=(autheticate)=async(req,res)=>{
             console.log(account.firstname)
             console.log(req.user.email)
             console.log(req.user.id)
-
+            console.log(req.params.id)
             const messageContent = {
               submissionUrl: newSubmission.submission_url,
               userEmail: req.user.email,
               user_name:account.firstname,
-              user_id:req.user.id,
-              assignmentId:newSubmission.assignment_id
+              assignmentId:req.params.id,
+              user_id:req.user.id
           };
-            
-            logger.info(messageContent.submissionUrl)
-            logger.info(messageContent.userEmail)
+            logger.info('------')
+            logger.info('messageContent ',messageContent)
             const params = {
               Message: JSON.stringify(messageContent),
               TopicArn: process.env.TopicArn,
-             // MessageStructure: 'json'
             };
 
             sns.publish(params, (err, data) => {
