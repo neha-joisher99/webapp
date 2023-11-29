@@ -27,7 +27,11 @@ module.exports = (sequelize, DataTypes) => {
     submission_updated:{
             type: DataTypes.DATE,
             defaultValue: DataTypes.literal('CURRENT_TIMESTAMP'),
-            readOnly: true,}
+            readOnly: true,},
+     ownerId:{
+            type: DataTypes.UUID,
+            readOnly: true,
+     }
     }, {
         sequelize,
         timestamps: false,

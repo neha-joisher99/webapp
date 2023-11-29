@@ -6,7 +6,7 @@ const loadUserDataFromCSV = require('./csvprocessor.js');
 const logger=require('./logger/index.js')
 
 const PORT=3000
-db.sequelize.sync({ alter: true })
+db.sequelize.sync({ force: true })
   .then(() => {
     logger.info('Connected to the database')
     console.log('Connected to the database');
