@@ -431,20 +431,22 @@ const postAssignemntSubmission=(autheticate)=async(req,res)=>{
             console.log(req.user.id)
             const account = await db.account.findOne({ where: { id: req.user.id } });
             //console.log(account)
-            console.log(account.email)
-            console.log(account.firstname)
-            console.log(req.user.email)
-            console.log(req.user.id)
-            console.log(req.params.id)
+            // console.log(account.email)
+            // console.log(account.firstname)
+            // console.log(req.user.email)
+            // console.log(req.user.id)
+            // console.log(req.params.id)
+            console.log(newSubmission)
             const messageContent = {
               submissionUrl: newSubmission.submission_url,
               userEmail: req.user.email,
               user_name:account.firstname,
               assignmentId:req.params.id,
-              user_id:req.user.id
+              user_id:req.user.id,
+              submission_id: newSubmission.id
           };
             logger.info('------')
-            logger.info('messageContent ',messageContent)
+            logger.info(JSON.stringify(messageContent))
             const params = {
               Message: JSON.stringify(messageContent),
               TopicArn: process.env.TopicArn,
