@@ -6,6 +6,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 const db = require('../models');
 const logger=require('../logger/index.js')
 const StatsD = require('node-statsd');
+const axios =require('axios');
+const url =require('url');
 
 const AWS = require('aws-sdk');
 
@@ -159,6 +161,7 @@ const postAssignemnts=(authenticate)= async(req,res)=>{
 
       if (assignment !== null) {
         if (assignment.accountId==req.user.id){
+            await db.submission.destroy({ where: { assignmentId: assignmentIdDeleteMapp } });
             await assignment.destroy();
             logger.info(`API Assignment - Request delete - Assignement ${assignment.id} deleted successfully!`)
             res.status(204).send(); 
@@ -365,6 +368,54 @@ const postAssignemntSubmission=(autheticate)=async(req,res)=>{
     logger.error(`API Assignments - Request post - Submission - Bad request - Invalid request body`);
     return res.status(400).send('Request body must contain only the submission URL');
   }
+
+
+      function isValidProtocol(submissionUrl) {
+        try {
+            const parsedUrl = new URL(submissionUrl);
+            console.log(parsedUrl)
+            return parsedUrl.protocol === 'http:' || parsedUrl.protocol === 'https:' 
+        } catch (err) {
+            return false;
+        }
+    }
+
+    function isZipFile(submissionUrl) {
+      return submissionUrl.endsWith('.zip');
+  }
+
+
+// Check if the URL is valid
+      if (!isValidProtocol(submission_url)) {
+        logger.error(`API Assignments - Invalid submission URL format.`);
+        return res.status(400).send('Invalid submission URL format. URL must be HTTP or HTTPS.');
+      }
+
+      // Check if the URL points to a .zip file
+      if (!isZipFile(submission_url)) {
+        logger.error(`API Assignments - Submission URL is not a .zip file.`);
+        return res.status(400).send('Submission URL must be a .zip file.');
+      }
+let  headResponse
+    try {
+       headResponse = await axios.head(submission_url);
+      if (headResponse.status !== 200) {
+        logger.error(`API Assignments - Submission URL is not reachable.`);
+        return res.status(400).send('Submission URL is not reachable');
+    }
+         headResponse = await axios.get(submission_url);
+    // Check if the file at the URL has a non-zero payload
+    const contentLength = headResponse.headers['content-length'];
+    if (!contentLength || parseInt(contentLength, 10) === 0) {
+        logger.error(`API Assignments - The file at the URL has a 0-byte payload.`);
+        return res.status(400).send('The file at the URL has a 0-byte payload');
+    }
+} catch (err) {
+    // Handle other errors (e.g., network issues, invalid URL format, etc.)
+    logger.error(`API Assignments - Error when validating submission URL: ${err.message}`);
+    return res.status(400).send('Error when validating submission URL: ' + err.message);
+}
+
   let assignment=null;
   console.log(req.params.id)
   //check if assignmenet does not exist
@@ -388,17 +439,24 @@ const postAssignemntSubmission=(autheticate)=async(req,res)=>{
         const currentDate = new Date();
         const deadline = new Date(assignment.deadline);
 
-        const submissionsCount = await db.submission.count({
-          where: { assignmentId: req.params.id }
-        });
+        // const submissionsCount = await db.submission.count({
+        //   where: { assignmentId: req.params.id }
+        // });
 
-        console.log(submissionsCount)
+        const old_submissions = await db.submission.findAll({ where: { assignmentId: req.params.id, ownerId: req.user.id } });
+
+        if (old_submissions.length == assignment.num_of_attempts) {
+          logger.error('Exceeded the number of submission attempts');
+          return res.status(403).json({ message: 'Exceeded the number of submission attempts' });
+        }
+
+        //console.log(submissionsCount)
         console.log(assignment.num_of_attempts)
 
-        if (submissionsCount >= assignment.num_of_attempts) {
-          logger.error(`API Assignment - Exceeded the number of submission attempts.`);
-          return res.status(400).send('Exceeded the number of submission attempts');
-        }
+        // if (submissionsCount >= assignment.num_of_attempts) {
+        //   logger.error(`API Assignment - Exceeded the number of submission attempts.`);
+        //   return res.status(400).send('Exceeded the number of submission attempts');
+        // }
 
           if (currentDate > deadline) {
             logger.error(`API Assignment - Submission deadline has passed.`);
@@ -411,10 +469,10 @@ const postAssignemntSubmission=(autheticate)=async(req,res)=>{
 
           const newSubmission = await db.submission.create({
             submission_url: req.body.submission_url,
-            assignment_id: req.params.id,
+            assignmentId: req.params.id,
             submission_date: currentDate.toISOString(),
             submission_updated: currentDate.toISOString(),
-            assignmentId: req.params.id,
+            ownerId: req.user.id,
           });
 
           const reorderedAssignmentData = {

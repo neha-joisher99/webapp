@@ -13,6 +13,7 @@
   "dependencies": {
     "app-root-path": "^3.1.0",
     "aws-sdk": "^2.1499.0",
+    "axios": "^1.6.2",
     "basic-auth": "^2.0.1",
     "bcrypt": "^5.1.1",
     "body-parser": "^1.20.2",
@@ -32,6 +33,7 @@
     "sequelize-cli": "^6.6.1",
     "statsd": "^0.9.0",
     "supertest": "^6.3.3",
+    "url": "^0.11.3",
     "winston": "^3.11.0"
   },
   "devDependencies": {
