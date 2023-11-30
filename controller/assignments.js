@@ -396,25 +396,6 @@ const postAssignemntSubmission=(autheticate)=async(req,res)=>{
         logger.error(`API Assignments - Submission URL is not a .zip file.`);
         return res.status(400).send('Submission URL must be a .zip file.');
       }
-let  headResponse
-    try {
-       headResponse = await axios.head(submission_url);
-      if (headResponse.status !== 200) {
-        logger.error(`API Assignments - Submission URL is not reachable.`);
-        return res.status(400).send('Submission URL is not reachable');
-    }
-         headResponse = await axios.get(submission_url);
-    // Check if the file at the URL has a non-zero payload
-    const contentLength = headResponse.headers['content-length'];
-    if (!contentLength || parseInt(contentLength, 10) === 0) {
-        logger.error(`API Assignments - The file at the URL has a 0-byte payload.`);
-        return res.status(400).send('The file at the URL has a 0-byte payload');
-    }
-} catch (err) {
-    // Handle other errors (e.g., network issues, invalid URL format, etc.)
-    logger.error(`API Assignments - Error when validating submission URL: ${err.message}`);
-    return res.status(400).send('Error when validating submission URL: ' + err.message);
-}
 
   let assignment=null;
   console.log(req.params.id)
