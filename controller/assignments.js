@@ -161,8 +161,13 @@ const postAssignemnts=(authenticate)= async(req,res)=>{
 
       if (assignment !== null) {
         if (assignment.accountId==req.user.id){
+          console.log(assignmentIdDeleteMapp)
             await db.submission.destroy({ where: { assignmentId: assignmentIdDeleteMapp } });
+            console.log('abc')
+            const objects = await db.submission.findAll({ where: { assignmentId: assignmentIdDeleteMapp } });
+            console.log(objects)
             await assignment.destroy();
+            console.log(assignment)
             logger.info(`API Assignment - Request delete - Assignement ${assignment.id} deleted successfully!`)
             res.status(204).send(); 
         }else {
@@ -415,7 +420,7 @@ const postAssignemntSubmission=(autheticate)=async(req,res)=>{
     console.log(assignment.accountId)
     console.log(req.user.id)
     if (assignment !== null) {
-      if (assignment.accountId==req.user.id){
+    //  if (assignment.accountId==req.user.id){
         console.log('inside loop')
         const currentDate = new Date();
         const deadline = new Date(assignment.deadline);
@@ -500,12 +505,12 @@ const postAssignemntSubmission=(autheticate)=async(req,res)=>{
           });
         
 
-      }else {
-        logger.error(`API Assignment - Request post Submission - User ${req.user.id} is trying to create a submission for user ${assignment.accountId}. Action Forbidden`)
-        res.status(403).send()
-      }
-     } 
-  } catch (SequelizeDatabaseError) {
+      // }else {
+      //   logger.error(`API Assignment - Request post Submission - User ${req.user.id} is trying to create a submission for user ${assignment.accountId}. Action Forbidden`)
+      //   res.status(403).send()
+      // }
+    // } 
+  }} catch (SequelizeDatabaseError) {
     console.log(SequelizeDatabaseError)
   }
 }  
