@@ -58,8 +58,8 @@ jobs:
             VERSION=$(aws ec2 describe-launch-templates --launch-template-ids $LAUNCH_TEMPLATE_ID --query 'LaunchTemplates[0].LatestVersionNumber' --output text)
 
             echo "New Version: $VERSION"
-            echo "::set-env name=LAUNCH_TEMPLATE_ID::$LAUNCH_TEMPLATE_ID"
-            echo "::set-env name=VERSION::$VERSION"
+            echo "LAUNCH_TEMPLATE_ID=$LAUNCH_TEMPLATE_ID" >> $GITHUB_ENV
+            echo "VERSION=$VERSION" >> $GITHUB_ENV
 
     - name: Fetch Existing Auto Scaling Group Names
       id: fetch-asg-names
