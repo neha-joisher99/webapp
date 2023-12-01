@@ -48,8 +48,11 @@ jobs:
             # Fetch the latest AMI ID 
             AMI_ID=$(aws ec2 describe-images --owners ${{ secrets.ACCOUNT_ID }} --query 'Images[0].ImageId' --output text)
             
+            # Fetch the latest version number of the launch template
+            LATEST_VERSION=$(aws ec2 describe-launch-template-versions --launch-template-id $LAUNCH_TEMPLATE_ID --query 'LaunchTemplateVersions[-1:].VersionNumber' --output text)
+
             # Create a new version of the launch template with the latest AMI ID
-            aws ec2 create-launch-template-version --launch-template-id $LAUNCH_TEMPLATE_ID --source-version $LATEST --launch-template-data '{"ImageId":"'$AMI_ID'"}'
+            aws ec2 create-launch-template-version --launch-template-id $LAUNCH_TEMPLATE_ID --source-version $LATEST_VERSION --launch-template-data '{"ImageId":"'$AMI_ID'"}'
             
             # Extract the version number of the new launch template
             VERSION=$(aws ec2 describe-launch-templates --launch-template-ids $LAUNCH_TEMPLATE_ID --query 'LaunchTemplates[0].LatestVersionNumber' --output text)
