@@ -57,6 +57,10 @@ jobs:
             # Extract the version number of the new launch template
             VERSION=$(aws ec2 describe-launch-templates --launch-template-ids $LAUNCH_TEMPLATE_ID --query 'LaunchTemplates[0].LatestVersionNumber' --output text)
 
+            echo "New Version: $VERSION"
+            echo "::set-env name=LAUNCH_TEMPLATE_ID::$LAUNCH_TEMPLATE_ID"
+            echo "::set-env name=VERSION::$VERSION"
+
             echo "Launch Template ID: $LAUNCH_TEMPLATE_ID"
             echo "AMI ID: $AMI_ID"
             echo "Latest Version: $LATEST_VERSION"
@@ -72,19 +76,11 @@ jobs:
       
     - name: Update Auto Scaling Groups to New Launch Template Version
       run: |
-
-              # Debug: Print the Launch Template ID and Version
-              echo "Using Launch Template ID: $LAUNCH_TEMPLATE_ID"
-              echo "Using Version: $VERSION" 
-              echo "Using ASG: $ASG_NAME"    
-        
               # Iterate over each Auto Scaling group name
               for ASG_NAME in ${{ steps.fetch-asg-names.outputs.asgNames }}
               do
                 echo "Updating Auto Scaling Group: $ASG_NAME"
-                
-                # Update the Auto Scaling group to use the new launch template version
-                aws autoscaling update-auto-scaling-group --auto-scaling-group-name $ASG_NAME --launch-template "LaunchTemplateId=$LAUNCH_TEMPLATE_ID,Version=$VERSION"
+                aws autoscaling update-auto-scaling-group --auto-scaling-group-name $ASG_NAME --launch-template "LaunchTemplateId=${{ env.LAUNCH_TEMPLATE_ID }},Version=${{ env.VERSION }}"
               done
       
     - name: Issue instance refresh
