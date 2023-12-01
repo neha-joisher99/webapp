@@ -2,7 +2,7 @@ name: Continuous Deployment
 
 on:
     workflow_run:
-      workflows: ["ami_build"]
+      workflows: ["ami-build"]
       types: 
         - completed
       branches:
