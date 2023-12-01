@@ -1,0 +1,95 @@
+name: Continuous Deployment
+
+on:
+  pull_request:
+    types: [closed]
+
+jobs:
+  deploy:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '16' 
+
+    - name: Install AWS CLI
+      run: |
+        curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+        unzip awscliv2.zip
+        sudo ./aws/install
+        aws --version
+
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_DEMO_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_DEMO_SECRET_ACCESS_KEY }}
+        aws-region: ${{ secrets.AWS_REGION }} 
+
+    - name: Fetch Existing Launch Template ID
+      id: fetch-template
+      run: |
+          # Modify the query to target the specific launch template you need
+          LAUNCH_TEMPLATE_ID=$(aws ec2 describe-launch-templates --query 'LaunchTemplates[0].LaunchTemplateId' --output text)
+          echo "Launch Template ID: $LAUNCH_TEMPLATE_ID"
+          echo "::set-output name=launchTemplateId::$LAUNCH_TEMPLATE_ID"
+  
+    - name: Update Launch Template
+      run: |
+            # Use the launch template ID from the previous step
+            LAUNCH_TEMPLATE_ID=${{ steps.fetch-template.outputs.launchTemplateId }}
+    
+            # Fetch the latest AMI ID 
+            AMI_ID=$(aws ec2 describe-images --owners ${{ secrets.ACCOUNT_ID }} --query 'Images[0].ImageId' --output text)
+            
+            # Create a new version of the launch template with the latest AMI ID
+            aws ec2 create-launch-template-version --launch-template-id $LAUNCH_TEMPLATE_ID --source-version $LATEST --launch-template-data '{"ImageId":"'$AMI_ID'"}'
+            
+            # Extract the version number of the new launch template
+            VERSION=$(aws ec2 describe-launch-templates --launch-template-ids $LAUNCH_TEMPLATE_ID --query 'LaunchTemplates[0].LatestVersionNumber' --output text)
+
+    - name: Fetch Existing Auto Scaling Group Names
+      id: fetch-asg-names
+      run: |
+              # List Auto Scaling groups and store their names
+              ASG_NAMES=$(aws autoscaling describe-auto-scaling-groups --query 'AutoScalingGroups[*].AutoScalingGroupName' --output text)
+              echo "Auto Scaling Group Names: $ASG_NAMES"
+              echo "::set-output name=asgNames::$ASG_NAMES"
+      
+    - name: Update Auto Scaling Groups to New Launch Template Version
+      run: |
+              # Iterate over each Auto Scaling group name
+              for ASG_NAME in ${{ steps.fetch-asg-names.outputs.asgNames }}
+              do
+                echo "Updating Auto Scaling Group: $ASG_NAME"
+                
+                # Update the Auto Scaling group to use the new launch template version
+                aws autoscaling update-auto-scaling-group --auto-scaling-group-name $ASG_NAME --launch-template "LaunchTemplateId=$LAUNCH_TEMPLATE_ID,Version=$VERSION"
+              done
+      
+    - name: Issue instance refresh
+      run: |
+            for ASG_NAME in ${{ steps.fetch-asg-names.outputs.asgNames }}
+            do
+                echo "Starting instance refresh for: $ASG_NAME"
+                
+                # Start an instance refresh
+                aws autoscaling start-instance-refresh --auto-scaling-group-name $ASG_NAME
+
+                # Poll the status of the instance refresh
+                while true; do
+                STATUS=$(aws autoscaling describe-instance-refreshes --auto-scaling-group-name $ASG_NAME --query 'InstanceRefreshes[0].Status' --output text)
+                if [[ $STATUS == "InProgress" ]]; then
+                    echo "Instance refresh for $ASG_NAME in progress..."
+                    sleep 30
+                else
+                    echo "Instance refresh for $ASG_NAME complete with status: $STATUS"
+                    break
+                fi
+                done
+            done
