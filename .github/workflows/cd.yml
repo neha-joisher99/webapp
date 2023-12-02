@@ -38,7 +38,7 @@ jobs:
       - name: Update Launch Template
         run: |
           LAUNCH_TEMPLATE_ID=${{ steps.fetch-template.outputs.launchTemplateId }}
-          AMI_ID=$(aws ec2 describe-images --owners ${{ secrets.ACCOUNT_ID }} --query 'Images[0].ImageId' --output text)
+          AMI_ID=$(aws ec2 describe-images --owners ${{ secrets.ACCOUNT_ID }} --filters 'Name=state,Values=available' --query 'sort_by(Images, &CreationDate)[-1].ImageId' --output text)
           echo "AMI ID: $AMI_ID"
           
           aws ec2 create-launch-template-version --launch-template-id $LAUNCH_TEMPLATE_ID --source-version $(aws ec2 describe-launch-template-versions --launch-template-id $LAUNCH_TEMPLATE_ID --query 'LaunchTemplateVersions[-1:].VersionNumber' --output text) --launch-template-data '{"ImageId":"'$AMI_ID'"}'
@@ -63,29 +63,24 @@ jobs:
             aws autoscaling update-auto-scaling-group --auto-scaling-group-name $ASG_NAME --launch-template "LaunchTemplateId=${{ env.LAUNCH_TEMPLATE_ID }},Version=${{ env.VERSION }}"
           done
 
-      - name: Issue instance refresh
-        run: |
-          for ASG_NAME in ${{ steps.fetch-asg-names.outputs.asgNames }}
-          do
-            echo "Checking instance refresh status for: $ASG_NAME"
-            STATUS=$(aws autoscaling describe-instance-refreshes --auto-scaling-group-name $ASG_NAME --query 'InstanceRefreshes[0].Status' --output text)
-
-            if [[ $STATUS == "InProgress" ]]; then
-              echo "An instance refresh is already in progress for $ASG_NAME. Waiting for it to complete..."
-              while [[ $STATUS == "InProgress" ]]; do
-                sleep 30
+          - name: Issue instance refresh
+          run: |
+            for ASG_NAME in ${{ steps.fetch-asg-names.outputs.asgNames }}
+            do
+              echo "Checking instance refresh status for: $ASG_NAME"
+              # ... rest of the script ...
+  
+              echo "Starting a new instance refresh for: $ASG_NAME"
+              aws autoscaling start-instance-refresh --auto-scaling-group-name $ASG_NAME
+  
+              while true; do
                 STATUS=$(aws autoscaling describe-instance-refreshes --auto-scaling-group-name $ASG_NAME --query 'InstanceRefreshes[0].Status' --output text)
-                echo "Waiting... Current status: $STATUS"
+                if [[ $STATUS == "InProgress" ]]; then
+                  echo "Instance refresh for $ASG_NAME in progress..."
+                  sleep 30
+                else
+                  echo "Instance refresh for $ASG_NAME complete with status: $STATUS"
+                  break
+                fi
               done
-            fi
-
-            echo "Starting a new instance refresh for: $ASG_NAME"
-            aws autoscaling start-instance-refresh --auto-scaling-group-name $ASG_NAME
-
-            while true; do
-              STATUS=$(aws autoscaling describe-instance-refreshes --auto-scaling-group-name $ASG_NAME --query 'InstanceRefreshes[0].Status' --output text)
-              if [[ $STATUS == "InProgress" ]]; then
-                echo "Instance refresh for $ASG_NAME in progress..."
-                sleep 30
-              else
-                echo "Instance refresh for $AS
+            done
