@@ -63,6 +63,7 @@ jobs:
             aws autoscaling update-auto-scaling-group --auto-scaling-group-name $ASG_NAME --launch-template "LaunchTemplateId=${{ env.LAUNCH_TEMPLATE_ID }},Version=${{ env.VERSION }}"
           done
 
+
       - name: Issue instance refresh
         run: |
             for ASG_NAME in ${{ steps.fetch-asg-names.outputs.asgNames }}
