@@ -375,32 +375,32 @@ const postAssignemntSubmission=(autheticate)=async(req,res)=>{
   }
 
 
-      function isValidProtocol(submissionUrl) {
-        try {
-            const parsedUrl = new URL(submissionUrl);
-            console.log(parsedUrl)
-            return parsedUrl.protocol === 'http:' || parsedUrl.protocol === 'https:' 
-        } catch (err) {
-            return false;
-        }
-    }
+//       function isValidProtocol(submissionUrl) {
+//         try {
+//             const parsedUrl = new URL(submissionUrl);
+//             console.log(parsedUrl)
+//             return parsedUrl.protocol === 'http:' || parsedUrl.protocol === 'https:' 
+//         } catch (err) {
+//             return false;
+//         }
+//     }
 
-    function isZipFile(submissionUrl) {
-      return submissionUrl.endsWith('.zip');
-  }
+//     function isZipFile(submissionUrl) {
+//       return submissionUrl.endsWith('.zip');
+//   }
 
 
-// Check if the URL is valid
-      if (!isValidProtocol(submission_url)) {
-        logger.error(`API Assignments - Invalid submission URL format.`);
-        return res.status(400).send('Invalid submission URL format. URL must be HTTP or HTTPS.');
-      }
+// // Check if the URL is valid
+//       if (!isValidProtocol(submission_url)) {
+//         logger.error(`API Assignments - Invalid submission URL format.`);
+//         return res.status(400).send('Invalid submission URL format. URL must be HTTP or HTTPS.');
+//       }
 
-      // Check if the URL points to a .zip file
-      if (!isZipFile(submission_url)) {
-        logger.error(`API Assignments - Submission URL is not a .zip file.`);
-        return res.status(400).send('Submission URL must be a .zip file.');
-      }
+//       // Check if the URL points to a .zip file
+//       if (!isZipFile(submission_url)) {
+//         logger.error(`API Assignments - Submission URL is not a .zip file.`);
+//         return res.status(400).send('Submission URL must be a .zip file.');
+//       }
 
   let assignment=null;
   console.log(req.params.id)
