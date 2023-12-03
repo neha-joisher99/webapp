@@ -59,7 +59,7 @@ jobs:
         run: |
           for ASG_NAME in ${{ steps.fetch-asg-names.outputs.asgNames }}
           do
-            echo "Updating Auto Scaling Groups in : $ASG_NAME"
+            echo "Updating Auto Scaling Group: $ASG_NAME"
             aws autoscaling update-auto-scaling-group --auto-scaling-group-name $ASG_NAME --launch-template "LaunchTemplateId=${{ env.LAUNCH_TEMPLATE_ID }},Version=${{ env.VERSION }}"
           done
 
@@ -68,7 +68,7 @@ jobs:
         run: |
             for ASG_NAME in ${{ steps.fetch-asg-names.outputs.asgNames }}
             do
-              echo "Checking instance refreshh status for: $ASG_NAME"
+              echo "Checking instance refresh status for: $ASG_NAME"
               # ... rest of the script ...
   
               echo "Starting a new instance refresh for: $ASG_NAME"
