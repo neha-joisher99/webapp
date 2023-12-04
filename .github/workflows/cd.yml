@@ -66,22 +66,28 @@ jobs:
 
       - name: Issue instance refresh
         run: |
-            for ASG_NAME in ${{ steps.fetch-asg-names.outputs.asgNames }}
-            do
-              echo "Checking instance refresh status for: $ASG_NAME"
-              # ... rest of the script ...
-  
-              echo "Starting a new instance refresh for: $ASG_NAME"
-              aws autoscaling start-instance-refresh --auto-scaling-group-name $ASG_NAME
-  
-              while true; do
-                STATUS=$(aws autoscaling describe-instance-refreshes --auto-scaling-group-name $ASG_NAME --query 'InstanceRefreshes[0].Status' --output text)
-                if [[ $STATUS == "InProgress" ]]; then
-                  echo "Instance refresh for $ASG_NAME in progress..."
-                  sleep 30
-                else
-                  echo "Instance refresh for $ASG_NAME complete with status: $STATUS"
-                  break
-                fi
-              done
+          for ASG_NAME in ${{ steps.fetch-asg-names.outputs.asgNames }}
+          do
+            echo "Starting instance refresh for: $ASG_NAME"
+            aws autoscaling start-instance-refresh --auto-scaling-group-name $ASG_NAME
+      
+            while true; do
+              # Fetch the latest instance refresh status
+              STATUS=$(aws autoscaling describe-instance-refreshes --auto-scaling-group-name $ASG_NAME --query 'InstanceRefreshes[0].Status' --output text)
+              PERCENTAGE=$(aws autoscaling describe-instance-refreshes --auto-scaling-group-name $ASG_NAME --query 'InstanceRefreshes[0].PercentageComplete' --output text)
+              
+              echo "Current status: $STATUS, Percentage Complete: $PERCENTAGE%"
+      
+              # Check if the refresh is successful and 100% complete
+              if [[ $STATUS == "Successful" && $PERCENTAGE == 100 ]]; then
+                echo "Instance refresh for $ASG_NAME completed successfully."
+                break
+              elif [[ $STATUS == "Failed" || $STATUS == "Cancelled" ]]; then
+                echo "Instance refresh for $ASG_NAME failed or was cancelled."
+                exit 1
+              else
+                echo "Instance refresh for $ASG_NAME is still in progress..."
+                sleep 30
+              fi
             done
+          done
