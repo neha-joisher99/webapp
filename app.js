@@ -23,7 +23,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 
 // Routes
-app.use('/v1/assignments', router);
+app.use('/v4/assignments', router);
 app.use('/healthz', routerHealth);
 app.use('/', routerApp);
 
